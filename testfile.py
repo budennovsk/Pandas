@@ -12,7 +12,7 @@ from config import *
 #     print(f)
 
 conn = pyodbc.connect(f"""
-Driver={{{DRIVER_NAME}}};
+Driver={DRIVER_NAME};
 Server={SERVER_NAME};
 Database={DATA_BASE};
 Trusted_Connection=yes;
