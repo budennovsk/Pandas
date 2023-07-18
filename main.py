@@ -1,5 +1,3 @@
-
-
 import pandas as pd
 import numpy as np
 from io import StringIO
@@ -10,7 +8,7 @@ from io import StringIO
 #                   columns=['id', 'name', 'occupation'],
 #                   index=['a', 'b', 'c']
 #                   )
-#
+
 # print()
 # print('_____')
 # ds = pd.Series({1: '1111'})
@@ -53,36 +51,53 @@ from io import StringIO
 
 df = pd.read_csv('E:/яндекс загрузка/file-csv.csv', sep=',', encoding='utf-8', usecols=['quarter', 'SER_REF'])
 
-print(df.dtypes)
-# print(df.loc[0:5].iloc[0:10])
-# df['name'] = 1
-new_row = pd.Series(
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    [
-        'quarter', 'SER_REF', 'industry_code', 'industry_name', 'filled jobs', 'filled jobs revised',
-        'filled jobs diff', 'filled jobs % diff', 'total_earnings', 'total earnings revised', 'earnings diff',
-        'earnings % diff'
-    ]
+# print(df.dtypes)
 
-)
-# df.iloc[201]=new_row
-# df._append(new_row,ignore_index=True)
-# df.drop([0],inplace=True)
-# df.drop(['industry_code','filled jobs','filled jobs revised','filled jobs diff','filled jobs % diff','total_earnings','total earnings revised','earnings diff','earnings % diff'], axis=1, inplace=True)
-# df.iloc[:10].drop([6],inplace = True)
-print(df)
+# new_row = pd.Series(
+#     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+#     [
+#         'quarter', 'SER_REF', 'industry_code', 'industry_name', 'filled jobs', 'filled jobs revised',
+#         'filled jobs diff', 'filled jobs % diff', 'total_earnings', 'total earnings revised', 'earnings diff',
+#         'earnings % diff'
+#     ]
+#
+# )
+# print(new_row)
+#
+# print(df)
+# # df.loc[len(df.index)]= ['1111','11111']
+#
+# df.insert(2,'fff','Value')
+# print(df)
 
-csv_d1 = 'col_A, col_B, col_C\na1, b1, c1\na2, b2, c2'
+df1 = pd.DataFrame([[1, 55],
+                    [2, 45],
+                    [3, 35]],
+                   columns=['id', 'value'],
 
-df = pd.read_csv(StringIO(csv_d1))
-print(df)
-print("_____________")
-json_buf='[[12, 24, 14, 17], [1, 54, 25, 83], [65,35, 12, 72]]'
-fox = pd.read_json(json_buf, orient='value')
-print(fox.agg(['sum', 'mean', 'std'], axis=1))
-print(pd.get_option('display.encoding'))
-def gou():
-    return 25+25
-gou.__name__='loo'
-print(gou.__name__)
+                   )
+df2 = pd.DataFrame([[1, 45],
+                    [2, 35],
+                    [3, 25]],
+                   columns=['id', 'value'],
 
+                   )
+
+merged_data_top_m = pd.merge(df1, df2,
+                             on=['id'], how='outer')
+merged_data_top_m.fillna(0, inplace=True)
+
+merged_data_top_m['Sales_Difference'] = merged_data_top_m['value_x'] - merged_data_top_m[
+        'value_y']
+
+c = merged_data_top_m.drop(['value_x','value_y'],axis=1)
+print(c)
+
+eps = 1.0e-9
+
+    # Рассчитайте абсолютную разницу и относительное отклонение
+
+merged_data_top_m['Sales_Percentage_Change'] = (merged_data_top_m['Sales_Difference'] / (merged_data_top_m[
+                                                                                                 'value_x'] + eps)) * 100
+
+print(merged_data_top_m)

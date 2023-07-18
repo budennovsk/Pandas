@@ -18,7 +18,7 @@ def write_db_sql3(file_path):
         next(reader)
         with sqlite3.connect('sqldata.db') as con:
             cur = con.cursor()
-            cur.execute("""Drop table User""")
+            cur.execute("""Drop table if exists User""")
             cur.execute("""create table if not exists User
             (id INTEGER PRIMARY KEY AUTOINCREMENT,
             quarter TEXT,
