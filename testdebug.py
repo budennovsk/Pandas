@@ -2,6 +2,9 @@ import re
 import datetime
 import pytz
 import os
+import configparser
+from dotenv import load_dotenv
+load_dotenv()
 
 def test():
     # result_top_m = [('X5 Retail Group Private Label', 1996707.6139999633), ('MONDELEZE', 1549518.00800006),
@@ -48,7 +51,35 @@ def req():
 
     if not os.path.exists('sasa'):
         os.mkdir('sasa')
+
+
 if __name__ == "__main__":
+    config = configparser.ConfigParser()
+
+    # print(config.read("settings.ini"))
+    # print(config['vk']['username'])
+    # print(config['insta']['pass'])
+    # print([i for i in config['vk']])
+    # password = os.environ.get('password')
+    # print(password)
+    #
+    print(config.read('settings.txt'))
+    c = config['set']['name']
+    print(c)
+    #
+    # print(config.read('.env'))
+    # g = config['set']['password']
+    # print(g)
+
+    # config.read('cf.cfg')
+    # z = config.get('set','password')
+    # print(z)
+
+    # f = dict(qw.items('set'))
+    # print('d',f)
+    #
+    # print(f['password'])
+
     # test()
     # ew()
-    req()
+    # req()
