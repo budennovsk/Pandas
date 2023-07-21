@@ -94,8 +94,22 @@ def write_db_SQL(file_path, str_con):
             earnings_diff,
             earnings_diff_pr)
             values (?, ?, ?,?, ?, ?,?, ?, ?,?,?,?)""", data)
+            print('d')
 
+def get_data(str_con):
+    with pyodbc.connect(str_con) as con:
+        cur = con.cursor()
+        cur.execute("""
+        select top 10 filled_jobs
+        from User_table
+        
+        WHERE quarter = '2020.09' and (industry_code = 'B' or industry_code = 'C' )
+        order by filled_jobs desc 
+        """)
+        "AND (  Manufacture = 'Объединенные кондитеры'    OR Manufacture = 'Объединенные кондитеры'"
+        print(cur.fetchall())
 
 if __name__ == "__main__":
-    write_db_sql3(URL)
+    # write_db_sql3(URL)
     write_db_SQL(URL, string_connect)
+    get_data(string_connect)
