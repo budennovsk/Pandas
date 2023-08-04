@@ -64,7 +64,8 @@ def auto_fit_columns(worksheet, data):
 dfd = pd.read_excel('sales_Manufacture__all__HYPER_Печенье_Хард-дискаунтер.xlsx')
 file_name = 'data.xlsx'
 print('qqq')
-ccc = dfd.drop(['Сладкий Дом'],axis=1)
+ccc = dfd.drop(['Delibon'],axis=1)
+ccc['Сладкий Дом']=ccc['Сладкий Дом'].apply(lambda x: 1 if x>1000 else x)
 writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
 ccc.to_excel(writer, index=False, sheet_name='SalesData')
 
@@ -115,7 +116,7 @@ print(dfd.columns)
 # dfd['Сладкий Дом'][dfd['Сладкий Дом']>=1000]=1
 dfd['Сладкий Дом']=dfd['Сладкий Дом'].apply(lambda x: 1 if x>1000 else x)
 print(dfd)
-ccc = dfd.drop(['Сладкий Дом'],axis=1)
+
 print(ccc)
 # print(c.head(0))
 # c[c['Percentage_Sales_kg']>=40000000]=1
