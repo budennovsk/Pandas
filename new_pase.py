@@ -21,7 +21,7 @@ for g in range(1, (int(DEEP_RECURSION)) + 1):
     print(last_l,prev_p)
     print('__________')
     for i in data:
-        print(i)
+        print(i,1)
 
 
 
