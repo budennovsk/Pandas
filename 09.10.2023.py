@@ -12,7 +12,7 @@ for index, row in mask.iterrows():
     dict_data['dd']= list(row.values)
     print(dict_data)
 
-
+а
 # mask1 = dfd[(dfd['Measures'] == 'MARKET_DIFFERENCE_Sales_kg')]
 # mask2 = dfd[(dfd['Measures'] == 'MARKET_DIFFERENCE_PERCENT_Sales_kg')]
 #
