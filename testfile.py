@@ -61,7 +61,7 @@ def auto_fit_columns(worksheet, data):
 #                     'vata': [1, 444, 444, -555, 444, 444, 444],
 #                     'ccata': [1, -44, 1, -555, 1, 1, -55],
 #                     'ccta': [1, 1, 1, -555, 1, 1, 2]})
-dfd = pd.read_excel('sales_Manufacture__all__HYPER_Печенье_Хард-дискаунтер.xlsx')
+dfd = pd.read_excel('sales_Manufacture__all_3_HYPER_Печенье_Дискаунтер.xlsx')
 file_name = 'data.xlsx'
 print('qqq')
 ccc = dfd.drop(['Delibon'],axis=1)
