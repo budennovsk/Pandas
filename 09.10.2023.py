@@ -30,24 +30,51 @@ head_name = ['Percentage_Sales_rub', 'Sales_rub',
 
 for i in range(2):
     print('dd')
-    mask = dfd[(dfd['Measures'] == 'Percentage_Sales_rub') |
-               (dfd['Measures'] == 'Sales_Price') |
-               (dfd['Measures'] == 'Percentage_Sales_Price') |
-               (dfd['Measures'] == 'Percentage_Sales_kg_reg') |
-               (dfd['Measures'] == 'Percentage_Sales_Price_reg') |
-               (dfd['Measures'] == 'Percentage_Sales_kg_pr') |
-               (dfd['Measures'] == 'Percentage_Sales_Price_pr') |
-               (dfd['Measures'] == 'Kod_TT') |
-               (dfd['Measures'] == 'Percentage_Kod_TT') |
-               (dfd['Measures'] == 'SKU_ID') |
-               (dfd['Measures'] == 'Percentage_SKU_ID')
-               ]
-    print('11',mask)
-    q = mask.iloc[:, 1].tolist()
-    DATA.append(q)
-print(DATA)
-ap = pd.DataFrame(columns=head_name, data=DATA)
+    mask = (dfd[(dfd['Measures'] == 'Percentage_Sales_rub').values |
+               (dfd['Measures'] == 'Sales_Price').values |
+               (dfd['Measures'] == 'Percentage_Sales_Price').values |
+               (dfd['Measures'] == 'Percentage_Sales_kg_reg').values |
+               (dfd['Measures'] == 'Percentage_Sales_Price_reg').values |
+               (dfd['Measures'] == 'Percentage_Sales_kg_pr').values |
+               (dfd['Measures'] == 'Percentage_Sales_Price_pr').values |
+               (dfd['Measures'] == 'Kod_TT').values |
+               (dfd['Measures'] == 'Percentage_Kod_TT').values |
+               (dfd['Measures'] == 'SKU_ID').values |
+               (dfd['Measures'] == 'Percentage_SKU_ID').values
+               ])
+
+    mask = dfd[dfd['Measures'] == 'Percentage_Sales_rub'].values[0][1:]
+    mask1 = dfd[dfd['Measures'] == 'Sales_Price'].values[0][1:]
+    mask2= dfd[dfd['Measures'] == 'Percentage_Sales_Price'].values[0][1:]
+    mask3= dfd[dfd['Measures'] == 'Percentage_Sales_kg_reg'].values[0][1:]
+    mask4= dfd[dfd['Measures'] == 'Percentage_Sales_Price_reg'].values[0][1:]
+    mask5= dfd[dfd['Measures'] == 'Percentage_Sales_kg_pr'].values[0][1:]
+    mask6= dfd[dfd['Measures'] == 'Percentage_Sales_Price_pr'].values[0][1:]
+    mask7= dfd[dfd['Measures'] == 'Kod_TT'].values[0][1:]
+    mask8= dfd[dfd['Measures'] == 'Percentage_Kod_TT'].values[0][1:]
+    mask9= dfd[dfd['Measures'] == 'SKU_ID'].values[0][1:]
+    mask10= dfd[dfd['Measures'] == 'Percentage_SKU_ID'].values[0][1:]
+    DATA.append([*mask,*mask1,*mask2,*mask3,*mask4,*mask5,*mask6,*mask7,*mask8,*mask9,*mask10])
+
+r = range(len(DATA[0])-10)
+qr = ['Percentage_Sales_rub']*10
+print(qr)
+re = [*qr, *r]
+
+
+ap = pd.DataFrame(columns=re, data=DATA)
 print(ap)
+print(ap['Percentage_Sales_rub'])
+
+    # print(dfd[dfd['Measures'] == 'Sales_Price'])
+
+    # q = mask.iloc[:, 2:7]
+    # print('qqqq', q)
+
+#     DATA.append(q)
+# print(DATA)
+# ap = pd.DataFrame(columns=head_name, data=DATA)
+# print(ap)
 # res_data = pd.concat(ap, ignore_index=True)
 # print(res_data)
 
