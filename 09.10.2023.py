@@ -54,6 +54,7 @@ for i in range(2):
     mask8= dfd[dfd['Measures'] == 'Percentage_Kod_TT'].values[0][1:]
     mask9= dfd[dfd['Measures'] == 'SKU_ID'].values[0][1:]
     mask10= dfd[dfd['Measures'] == 'Percentage_SKU_ID'].values[0][1:]
+    # зв
     DATA.append([*mask,*mask1,*mask2,*mask3,*mask4,*mask5,*mask6,*mask7,*mask8,*mask9,*mask10])
 
 r = range(len(DATA[0])-10)
