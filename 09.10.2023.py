@@ -28,7 +28,7 @@ head_name = ['Percentage_Sales_rub', 'Sales_rub',
              'Percentage_Sales_Price_pr', 'Kod_TT', 'Percentage_Kod_TT',
              'SKU_ID', 'Percentage_SKU_ID']
 
-for i in range(2):
+for i in range(3):
     print('dd')
     mask = (dfd[(dfd['Measures'] == 'Percentage_Sales_rub').values |
                (dfd['Measures'] == 'Sales_Price').values |
@@ -56,16 +56,39 @@ for i in range(2):
     mask10= dfd[dfd['Measures'] == 'Percentage_SKU_ID'].values[0][1:]
     # зв
     DATA.append([*mask,*mask1,*mask2,*mask3,*mask4,*mask5,*mask6,*mask7,*mask8,*mask9,*mask10])
+    # DATA.append([*mask10, *mask3, *mask2, *mask, *mask4, *mask5, *mask6, *mask7, *mask8, *mask9, *mask1])
+    r = range(len(DATA[0])-10)
+    qr = ['Percentage_Sales_rub']*10
+    print(qr)
+    re = [*qr, *r]
+    ap = pd.DataFrame(columns=re, data=DATA)
+    ap['NAME']=ap.groupby(99)[98].rank()
+    print(ap)
 
-r = range(len(DATA[0])-10)
-qr = ['Percentage_Sales_rub']*10
-print(qr)
-re = [*qr, *r]
+    if ap['NAME'].values[0] ==2.0:
+        print('ssss',ap[['NAME',99]].values[0])
+
+        d,q,e = ['1111','eee','3333']
+        print(f'{d} {q} {e}')
 
 
-ap = pd.DataFrame(columns=re, data=DATA)
-print(ap)
-print(ap['Percentage_Sales_rub'])
+# r = range(len(DATA[0])-10)
+# qr = ['Percentage_Sales_rub']*10
+# print(qr)
+# re = [*qr, *r]
+#
+#
+# ap = pd.DataFrame(columns=re, data=DATA)
+# print(ap)
+# ap['NAME']=ap.groupby(99)[98].rank()
+# print(ap)
+# f = ap.groupby(99)
+
+# for i in f.groups:
+#     print('qqq',i)
+#     print('www',f.get_group(i))
+
+# print(ap['Percentage_Sales_rub'])
 
     # print(dfd[dfd['Measures'] == 'Sales_Price'])
 
