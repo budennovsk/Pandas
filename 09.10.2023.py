@@ -70,7 +70,8 @@ for i in range(3):
 
         d,q,e = ['1111','eee','3333']
         print(f'{d} {q} {e}')
-
+    if (ap.columns.values=='NAME').any():
+        print('___')
 
 # r = range(len(DATA[0])-10)
 # qr = ['Percentage_Sales_rub']*10
