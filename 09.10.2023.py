@@ -71,8 +71,27 @@ for i in range(3):
         d,q,e = ['1111','eee','3333']
         print(f'{d} {q} {e}')
     if (ap.columns.values=='NAME').any():
-        print('___')
+        y_coll = ap['Percentage_Sales_rub'].values
+        print('er',y_coll)
+        y_true= ['y_true']*y_coll.shape[0]
+        print('ff',y_coll.tolist())
+        df_y = pd.DataFrame(columns=[y_true],
+                            data=y_coll[0])
+        print('df_y',df_y)
 
+# count = model.predict(df_catboost[X_col]).shape[0]
+#         true_df = pd.DataFrame()
+#         predict_df = pd.DataFrame()
+#         for i in range(count):
+#             true_df = pd.concat([true_df, pd.DataFrame({f'Y_True': [f'Deep_recursive: {i + 1}']})])
+#             true_df = pd.concat([true_df, pd.DataFrame({f'Y_True': df_catboost[y_col].values[i]})])
+#             predict_df = pd.concat([predict_df, pd.DataFrame({f'Y_Predict': [f'Deep_recursive: {i + 1}']})])
+#             predict_df = pd.concat([predict_df, pd.DataFrame({f'Y_Predict': model.predict(df_catboost[X_col])[i]})])
+#         result_df_many = pd.concat([true_df, predict_df], axis=1)
+#         result_df_many.reset_index(drop=True, inplace=True)
+#         get_feature_importance_df_many = pd.DataFrame(model.get_feature_importance(prettified=True)[:10])
+#
+#         comparison = pd.concat([result_df_many,get_feature_importance_df_many], axis=1)
 # r = range(len(DATA[0])-10)
 # qr = ['Percentage_Sales_rub']*10
 # print(qr)
