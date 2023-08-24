@@ -7,7 +7,7 @@ import catboost
 from xlsxwriter.utility import xl_col_to_name
 import numpy as np
 
-res = pd.read_excel('ML_manufacture_first.xlsx')
+res = pd.read_excel('ML_manufacture_second.xlsx')
 
 
 def auto_fit_columns(worksheet, data):
@@ -54,40 +54,56 @@ def excel_df(merged_data, name_ver):
 
 
 def exel_graph(merged_data, name_ver):
+
     c = os.getcwd()
     name_folder = 'Grapth_DATA'
     if not os.path.isdir(f'{c}/Catboost_DATA/{name_folder}'):
         os.mkdir(f'{c}/Catboost_DATA/{name_folder}')
     print('0')
-    workbook = xlsxwriter.Workbook(f'Catboost_DATA/Grapth_DATA/graph__{name_ver}.xlsx')
-    worksheet = workbook.add_worksheet()
-    print('1')
-    # Данные для графика
+    file_name = f'{c}/Catboost_DATA/{name_folder}/graph__{name_ver}.xlsx'
 
-    worksheet.write_row('A1', merged_data.columns)
-    worksheet.write_column('A2', merged_data['y_true'])
-    worksheet.write_column('B2', merged_data['y_predict'])
-    worksheet.write_column('C2', merged_data[name_ver])
+    print('1')
+    writer = pd.ExcelWriter(path=file_name, engine='xlsxwriter')
+    merged_data.to_excel(writer, index=False, sheet_name='SalesData')
+
+    # Получите рабочий лист и рабочую книгу
+    workbook = writer.book
+    worksheet = writer.sheets['SalesData']
+
+    # Авто-подгонка размеров столбцов по ширине
+    auto_fit_columns(worksheet, merged_data)
+
+    # Примените форматирование
+    number_format = workbook.add_format({'num_format': '#,##0.00'})
+    worksheet.set_column('A:Z', 15, number_format)
+
 
     print('2')
     # Создание графика
     chart = workbook.add_chart({'type': 'line'})
+
     print('3')
-    # 'values': '=Sheet1!$B$2:$B$11'
+
     # Добавление данных в график
     chart.add_series({
-        'categories': '=Sheet1!$C$2:$C$11',
-        'values': '=Sheet1!$B$2:$B$11',
-        'name': name_ver,
+        'categories': '=SalesData!$C$2:$C$11',
+        'values': '=SalesData!$B$2:$B$11',
+        'name': str(name_ver),
+        'line': {'color': 'red'}
     })
     print('4')
-    chart.set_title({'name': 'Зависимость между y_predict и mesuares'})
-    chart.set_x_axis({'name': name_ver})
-    chart.set_y_axis({'name': 'y_predict'})
+    chart.set_title({'name': f'Зависимость между Y_Predict и {name_ver}'})
+    chart.set_x_axis({'name': str(name_ver),
+                      'num_format': '#,##0.00'})
+    chart.set_y_axis({'name': 'Y_Predict',
+                      'num_format': '#,##0.00'})
     # Вставка графика на лист
-    worksheet.insert_chart('D2', chart)
+
+    worksheet.insert_chart(f'A{len(merged_data)+3}', chart,{'x_scale': 2, 'y_scale': 2})
     print('5')
+
     # Закрытие файла
+
     workbook.close()
 
 
@@ -109,12 +125,14 @@ def catboost_model():
                                  'y_predict': model.predict(res[X_col])})
     # print(comparison)
     # print(comparison_r)
+    print('sasi')
     return model
 
 
 def get_df_graph():
-    new_res_df = res.copy()
-    for coloumns in new_res_df.columns[1:]:
+
+    for coloumns in res.columns[1:]:
+        new_res_df = res.copy()
         print(coloumns)
         new_res_df.iloc[:10, 1:] = new_res_df.agg(['mean']).values[0][1:]
 
@@ -130,12 +148,14 @@ def get_df_graph():
         y_col = 'Percentage_Sales_rub'
 
         model_cat = catboost_model()
-        comparison = pd.DataFrame({'y_true': new_res_df[y_col],
-                                   'y_predict': model_cat.predict(new_res_df[X_col])})
+        # comparison = pd.DataFrame({'y_true': new_res_df[y_col],
+        #                            'y_predict': model_cat.predict(new_res_df[X_col])})
 
-        add_col = pd.concat([comparison, column_val_X], axis=1)
-        excel_df(merged_data=new_res_df, name_ver=coloumns)
-        exel_graph(merged_data=add_col, name_ver=coloumns)
+        new_res_df.insert(1, 'Y_predict', model_cat.predict(new_res_df[X_col]))
+        # new_res_df['y_predict'] = model_cat.predict(new_res_df[X_col])
+        # add_col = pd.concat([comparison, column_val_X], axis=1)
+        # excel_df(merged_data=new_res_df, name_ver=coloumns)
+        exel_graph(merged_data=new_res_df, name_ver=coloumns)
 
 
 if '__main__' == __name__:
