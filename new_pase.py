@@ -40,3 +40,8 @@ for g in range(1, (int(DEEP_RECURSION)) + 1):
 # m = re.sub(r"\__all__\d*", '__all__',d)
 # m = re.fullmatch(r"\__all__\d*",d)
 # print(m)
+
+req = ['raz', 'dva', 'tri']
+for index, enumerate in enumerate(req):
+    print(')))))))))')
+    print(index,enumerate)
