@@ -42,17 +42,17 @@ def catboost_model_1():
     print('model', model)
     print('y_true', comparison)
     print(res['Sales_Price'].tolist())
-    model.save_model('trained_model.cbm')
-
+    # model.save_model('trained_model.cbm')
+    return model
 
 # Определяем функцию для минимизации
 
-def test(X_col_res, y_col_res):
+def test(X_col_res, y_col_res, model):
     print('zeka')
     print('ho',X_col_res)
     # Создаем обученную модель CatBoost
-    model = CatBoostRegressor()
-    model.load_model('trained_model.cbm')
+    # model = CatBoostRegressor()
+    # model.load_model('trained_model.cbm')
 
     # Определяем функцию для минимизации
     def objective(x):
@@ -62,8 +62,8 @@ def test(X_col_res, y_col_res):
         prediction = model.predict([x])
         print('a1', prediction)
         print('qwe')
-        print('a2', prediction[0])
-        return prediction[0]
+        print('a2', prediction)
+        return -prediction
 
     # Задаем начальное приближение
     x0 = X_col_res.values.tolist()[0]  # Примерный вектор начального приближения
@@ -78,7 +78,7 @@ def test(X_col_res, y_col_res):
     print("Оптимальные значения переменных:", result.x)
     print(result)
     print(X_col_res.values.tolist())
-    print(y_col_res)
+    print('res',y_col_res)
     '''y_true       y_true  y_predict
 0  16.175060  15.505207
 1  -8.375100  -7.316421
@@ -92,12 +92,12 @@ def test(X_col_res, y_col_res):
 9  45.610962  42.539152'''
 
 if __name__ == '__main__':
-    catboost_model_1()
+    model=catboost_model_1()
 
     for i in range(1,len(res)+1):
         X_col_res = res.iloc[i-1:i, 6:]
         y_col_res = res.iloc[i-1:i, 6:7]
-        test(X_col_res=X_col_res, y_col_res=y_col_res)
+        test(X_col_res=X_col_res, y_col_res=y_col_res, model=model)
     print('____')
     print(FUNC_MIN)
     for i in OPTIMAL_VALUES:
