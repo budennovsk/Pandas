@@ -89,6 +89,7 @@ def catboost_model_import():
     print(f'Среднеквадратичная ошибка результата между y_true и y_predict: {mse}')
 
     test_import( model=model)
+    # proverka(model=model)
 
 
 # Определяем функцию для минимизации
@@ -112,8 +113,13 @@ def test_import(model):
     print(result)
     # Выводим результаты оптимизации
 
+def proverka(model):
+    x = [504.18, -0.51, 3.06]
+    prediction = model.predict([x])
+    '''[5.01398637],[5.01398637],[5.01398637]'''
+    print(prediction)
 
 
 if __name__ == '__main__':
-    catboost_model_all()
-    # catboost_model_import()
+    # catboost_model_all()
+    catboost_model_import()

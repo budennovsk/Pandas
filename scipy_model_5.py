@@ -35,6 +35,7 @@ def catboost_model_all():
     print(comparison)
     mse = mean_squared_error(res[y_col], model.predict(res[X_col]))
     print(f'Среднеквадратичная ошибка результата между y_true и y_predict: {mse}')
+    print(model.get_feature_importance(prettified=True))
 
     test_all( model=model)
 
@@ -69,7 +70,8 @@ def catboost_model_import():
     valid = res[~res.index.isin(train.index)].copy()
 
 
-    X_col = ['Percentage_Sales_kg_pr', 'Sales_Price', 'Kod_TT', 'Percentage_Kod_TT']
+    # X_col = ['Percentage_Sales_kg_pr', 'Sales_Price', 'Kod_TT', 'Percentage_Kod_TT']
+    X_col = ['Percentage_Sales_Price_reg', 'Percentage_Sales_Price_pr']
     print(X_col)
 
     y_col = 'Percentage_Sales_rub'
@@ -105,10 +107,13 @@ def test_import(model):
 
         return -prediction
 
-    x0 = [59.05,293.09,254.50,21.05]
-    min_v = [-100,262.11,89.00,12.34]
-    max_v = [648.97,293.09,517.00,40.53]
-    result = dual_annealing(objective,x0=x0, bounds=list(zip(min_v, max_v)), maxiter=10000, seed=1237)
+    # x0 = [59.05,293.09,254.50,21.05]
+    # min_v = [-100,262.11,89.00,12.34]
+    # max_v = [648.97,293.09,517.00,40.53]
+    x0 = [2.19, -10.17]
+    min_v =[-4.09, -100.00]
+    max_v = [13.13, -10.17]
+    result = dual_annealing(objective,x0=x0, bounds=list(zip(min_v, max_v)), maxiter=100, seed=1237)
     # Выводим результаты оптимизации
     print("Максимум:", -result.fun)
     print("Оптимальные значения переменных:", result.x)
