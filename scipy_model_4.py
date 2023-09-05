@@ -122,49 +122,63 @@ def test_import(model):
     print(result)
     # Выводим результаты оптимизации
 
-def PCA():
+def PCA(num_comp):
     from sklearn.decomposition import PCA
     import numpy as np
-
+    # Настройка вывода DataFrame без сокращения колонок
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
     # Пример набора данных
     X = res[res.columns[7:]]
+    print(f'С нормализацией по значениям количество компонент - {num_comp}')
+    print("Входные данные\n", X)
+
     y = res['Percentage_Sales_rub']
-    print(y)
-    print(X.shape)
-    print(X)
+
+
 
     # Создание объекта PCA с числом компонентов = 2
-    pca = PCA(n_components=9)
-
-
+    pca = PCA(n_components=num_comp,whiten=True, random_state=42)
+    pca.set_output(transform='pandas')
     # Применение PCA к набору данных
     X_pca = pca.fit_transform(X)
 
+    print("Главные компоненты:\n", pca.components_)
+    print("Объясненная дисперсия каждой компоненты:\n", pca.explained_variance_ratio_)
+    print('Возвращает сингулярные значения, связанные с главными компонентами.')
+    print(pca.singular_values_)
     # Вывод преобразованных данных
     print("Преобразованные данные:")
+    print('Данные после преобразования методом PCA')
     print(X_pca)
-    print(X_pca.shape)
+    print("Оценка ковариационной матрицы:")
+    print(pca.get_covariance())
+
+    print('Размерность после ПСА',X_pca.shape)
+    print('Размерность до ПСА', X.shape)
     X_pca_df = pd.DataFrame(X_pca)
-    print(X_pca_df)
+
+
+
 
     X_pca_df.insert(0, 'Percentage_Sales_rub', y.values.tolist())
 
-    print(X_pca_df, 'ddd')
+    print("Датафрейм после преобразования методом PCA")
+    print(X_pca_df)
     new_cat_model(res_PCA=X_pca_df)
 
 
 def new_cat_model(res_PCA):
-    print('PCA')
-    print(res_PCA)
+
 
     train = res_PCA.sample(frac=0.8, random_state=42).copy()
 
     valid = res_PCA[~res_PCA.index.isin(train.index)].copy()
     X_col = res_PCA.columns[1:]
-    print(X_col)
+
 
     y_col = 'Percentage_Sales_rub'
-    print(y_col)
+
     train_pool = Pool(train[X_col], train[y_col])
     valid_pool = Pool(valid[X_col], valid[y_col])
 
@@ -195,5 +209,5 @@ if __name__ == '__main__':
 
     # end = time.time() - start
     # print(f'Время выполнения: {round(end, 2)}сeк')
-    PCA()
+    PCA(num_comp=2)
     # new_cat_model()
