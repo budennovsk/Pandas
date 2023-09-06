@@ -88,7 +88,7 @@ def new_cat_model(res_PCA):
 if __name__ == '__main__':
     from sklearn.metrics import mean_squared_error
 
-    PCA(num_comp=0.99)
+    PCA(num_comp=None)
     data =[16.25,7.88,-2.57,15.82,-7.62,17.36,4.23,-7.74,3.13,45.01]
     x_d = pd.DataFrame({'y_predict': data})
     res_f = pd.concat([res['Percentage_Sales_rub'],x_d], axis=1)
