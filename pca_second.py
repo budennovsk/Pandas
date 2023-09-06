@@ -11,15 +11,18 @@ def PCA(num_comp):
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', None)
     # Пример набора данных
+
     X = res[res.columns[6:]]
+
 
     print(f'Без нормализации по значениям количество компонент - {num_comp}')
     # print("Входные данные\n", X)
 
     y = res['Percentage_Sales_rub']
 
+
     # Создание объекта PCA с большим количеством компонентов
-    # n_components = 10  # Указываем желаемое количество компонентов
+    # n_components = 11  # Указываем желаемое количество компонентов
     # pca = PCA(n_components=min(X.shape[0], X.shape[1], n_components))
 
     # Создание объекта PCA с числом компонентов = 2
@@ -88,7 +91,7 @@ def new_cat_model(res_PCA):
 if __name__ == '__main__':
     from sklearn.metrics import mean_squared_error
 
-    PCA(num_comp=None)
+    PCA(num_comp=0.95)
     data =[16.25,7.88,-2.57,15.82,-7.62,17.36,4.23,-7.74,3.13,45.01]
     x_d = pd.DataFrame({'y_predict': data})
     res_f = pd.concat([res['Percentage_Sales_rub'],x_d], axis=1)
