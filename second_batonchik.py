@@ -4,8 +4,11 @@ import pandas as pd
 from catboost import CatBoostRegressor, Pool
 from scipy.optimize import dual_annealing
 
+from err import tr
+
 res = pd.read_excel('ML_manufacture_second_all_10_HYPER_Батончики_Супермаркет.xlsx')
 
+DATA_X = []
 
 def PCA(num_comp):
     from sklearn.decomposition import PCA
@@ -45,6 +48,12 @@ def PCA(num_comp):
 
     X_10[other_columns] = mean_values.values
     X_10 = X_10.head(1)
+    print('ddddddd',X_10)
+    print(X_10.to_numpy()[0])
+    mean = np.mean(X_10.to_numpy()[0], axis=0)
+    print('mean',mean)
+    X_10_mean = X_10 - mean
+    tr(data_max=X_10, data_max_mean=X_10_mean, data=X)
 
 
     X_value_mean_max_all = pd.DataFrame(res[res.columns[7:]].mean()).T
@@ -77,6 +86,9 @@ def PCA(num_comp):
 
     # КОД ПРЕОБРАЗОВАНИЯ НАДО СДЕЛАТЬ
     # new_data_1 = df_max_value_all.to_numpy().dot(pca.components_.T)
+
+
+
     new_data_11 = X_10.to_numpy().dot(pca.components_.T)
     new_data_1 = pca.components_.dot(X_10.to_numpy().T)
     print('ww1')
@@ -96,14 +108,15 @@ def PCA(num_comp):
 
     print(X_10)
     print('Транспонироване данные ')
-    print(invers)
-    print("___")
-    print(new_data_1)
+    # print(invers)
+    # print("___")
+    # print(new_data_1)
     print('____')
     # print('new_data_2',new_data_2)
     print('____')
     invers11 = pd.DataFrame(pca.inverse_transform(new_data_11))
-    print(invers11)
+    print('ss',invers11)
+    print(new_data_11)
     """[[ -744.48837536   823.34638541 -2632.80590047 -1186.33496123
     996.97855297    78.66783423 -2355.45658098]]"""
     '''new_data_2 [-808.7232276631614 2676.235108891138 -2161.512019180137
