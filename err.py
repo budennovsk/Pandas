@@ -1,3 +1,4 @@
+import numpy
 import pandas as pd
 from scipy.optimize import dual_annealing
 from sklearn.metrics import mean_squared_error
@@ -660,6 +661,7 @@ res = pd.read_excel('ML_manufacture_second_all_10_HYPER_Батончики_Су�
 
 def er():
     import numpy as np
+    from sklearn.metrics import mean_absolute_error
     from sklearn.preprocessing import StandardScaler
 
     pd.set_option('display.max_columns', None)
@@ -671,34 +673,51 @@ def er():
     X_10 = res[res.columns[6:]].copy()
     X_max_10 = X_10.iloc[:, 0::10].max()
     other_columns = X_10.columns.difference(X_10.columns[0::10])
-    mean_values = X_10[other_columns].mean()
+
+    random_values = np.random.uniform(1.01, 1.10, size=90)
+
+
+    mean_values = X_10[other_columns].mean() * random_values
 
     X_10.loc[:, 0::10] = X_max_10.values
 
     X_10[other_columns] = mean_values.values
-    # X_10 = X_10.head(1)
+    X_10 = X_10.head(1)
 
     # Ваша матрица данных
     data = X.to_numpy()
 
-    data1 = X_1.to_numpy()
+    data1 = X_10.to_numpy()
 
     # Вычислить среднее значение по столбцам
     mean = np.mean(data, axis=0)
 
+    # # Вычислить среднее значение и стандартное отклонение
+    # mean = np.mean(data1[0], axis=0)
+    # print('mean',pd.DataFrame(mean).T)
+    # std = np.std(data1[0], axis=0)
+    # print('std',pd.DataFrame(std).T)
 
+    # # Шкалирование данных
+    # scaled_data = (data - mean) / std
+    # scaled_data= np.nan_to_num(scaled_data,nan=0)
 
-
+    # # Шкалирование данных
+    # scaler = StandardScaler()
+    # scaled_data = scaler.fit_transform(data)
+    # print(scaled_data)
 
     # Отцентровать данные
     centered_data = data - mean
     print(centered_data)
     centered_data_1 = data1 - mean
-    print(centered_data_1.shape)
+    print('ssssssssssssssss')
     print(centered_data_1)
 
     # Вычислить ковариационную матрицу
-    covariance_matrix = np.cov(er, rowvar=False)
+    covariance_matrix = np.cov(centered_data, rowvar=False, bias=True)
+    print(covariance_matrix.shape)
+    print(centered_data.shape)
 
     # Вычислить собственные значения и собственные векторы
     eigenvalues, eigenvectors = np.linalg.eig(covariance_matrix)
@@ -713,6 +732,7 @@ def er():
 
     # Выбрать только первые num_components главных компонент
     selected_eigenvectors = sorted_eigenvectors[:, :num_components]
+
     print('w1')
     # Проецировать данные на главные компоненты
     projected_data = np.dot(centered_data, selected_eigenvectors)
@@ -728,14 +748,141 @@ def er():
     reconstructed_data_1 = np.dot(projected_data_1, selected_eigenvectors.T) + mean
 
     # Вывести восстановленные данные
+    print("входные данные для обучения модели")
     print(X)
 
-
+    print("данные после обучения модели")
     print(pd.DataFrame(np.real(reconstructed_data)))
     print("___")
-    # print(X_10)
-    print(X_1)
+    print("входные данные максимумов")
+    print(X_10)
+    print('выходные данные максимумов')
+    # print(X_1)
+
     print(pd.DataFrame(np.array(list(map(lambda x: x.real, reconstructed_data_1[0]))).reshape(1, -1)))
+
+    mse = mean_squared_error(X, pd.DataFrame(np.real(reconstructed_data)))
+    print(round(mse, 30))
+    print(mean_absolute_error(X, pd.DataFrame(np.real(reconstructed_data))))
+def gy():
+    import numpy as np
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import mean_absolute_error
+    from sklearn.linear_model import Lasso, Ridge
+
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
+    X = res[res.columns[6:]]
+    X_a = res.iloc[1, 6:]
+    X_1 = pd.DataFrame(X_a.values.reshape(1, -1))
+
+    X_10 = res[res.columns[6:]].copy()
+    X_max_10 = X_10.iloc[:, 0::10].max()
+    other_columns = X_10.columns.difference(X_10.columns[0::10])
+     # Генерация случайных чисел в диапазоне от 1 до 10
+    random_values = np.random.uniform(1.01, 1.10, size=90)
+    print(random_values)
+    mean_values = X_10[other_columns].mean() * random_values
+
+    X_10.loc[:, 0::10] = X_max_10.values
+    X_10[other_columns] = mean_values.values
+    X_10 = X_10.head(1)
+    # Ваш массив данных
+    data = X
+
+    # Шкалирование данных
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data)
+    scaled_data_1 = scaler.transform(X_10)
+    # scaled_data_1 = np.repeat(X_10.to_numpy(), 5,axis=0)
+
+
+
+
+
+    # Применение метода главных компонент
+    pca = PCA(n_components=0.95,whiten=True)
+
+    projected_data = pca.fit_transform(scaled_data)
+    projected_data_1 = pca.transform(scaled_data_1)
+    print('covariance')
+    print(projected_data_1)
+
+
+    # Возвращение к исходным значениям
+    reconstructed_data = scaler.inverse_transform(pca.inverse_transform(projected_data))
+    reconstructed_data_1 = scaler.inverse_transform(pca.inverse_transform(projected_data_1))
+
+    print(X)
+    # Вывод восстановленных данных
+    print(pd.DataFrame(reconstructed_data))
+    print('___')
+
+    print(X_10)
+    # print(pd.DataFrame(scaled_data_1))
+    print(pd.DataFrame(reconstructed_data_1))
+    mse = mean_squared_error(X.values.tolist(), pd.DataFrame(reconstructed_data).values.tolist())
+    print(round(mse,30))
+    print(mean_absolute_error(X, pd.DataFrame(reconstructed_data)))
+
+def ica():
+    import numpy as np
+    from sklearn.decomposition import KernelPCA
+
+
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
+    X = res[res.columns[6:]]
+    X_a = res.iloc[1, 6:]
+    X_1 = pd.DataFrame(X_a.values.reshape(1, -1))
+
+    X_10 = res[res.columns[6:]].copy()
+    X_max_10 = X_10.iloc[:, 0::10].max()
+    other_columns = X_10.columns.difference(X_10.columns[0::10])
+    # Генерация случайных чисел в диапазоне от 1 до 10
+    random_values = np.random.uniform(1.01, 1.10, size=90)
+
+    mean_values = X_10[other_columns].mean() * random_values
+
+    X_10.loc[:, 0::10] = X_max_10.values
+    X_10[other_columns] = mean_values.values
+    X_10 = X_10.head(1)
+
+
+    # Ваша матрица данных
+    data = X.to_numpy()
+
+    data1 = X_10.to_numpy()
+
+
+    # Создаем объект ядерного PCA
+    kpca = KernelPCA(n_components=10, kernel='poly', fit_inverse_transform=True)  # Используем радиальное базисное ядро (RBF kernel)
+
+    # Применяем ядерный PCA к данным
+    X_kpca = kpca.fit_transform(data)
+
+    X_kpca1 = kpca.transform(data1)
+
+
+
+    # Выполняем обратное преобразование для восстановления исходных значений
+    X_inverse = kpca.inverse_transform(X_kpca)
+    X_inverse1 = kpca.inverse_transform(X_kpca1)
+
+    print('ICA')
+    print(pd.DataFrame(X_kpca))
+    print('X_inverse')
+    print(pd.DataFrame(data))
+    print('____')
+    print(pd.DataFrame(X_inverse))
+
+    print('ICA')
+    print(pd.DataFrame(X_kpca1))
+    print('X_inverse')
+    print(pd.DataFrame(data1))
+    print('____')
+    print(pd.DataFrame(X_inverse1))
 
 
 
@@ -759,4 +906,6 @@ if __name__ == '__main__':
     # lox()
     # max_10()
     # tr()
-    er()
+    # er()
+    # gy()
+    ica()
