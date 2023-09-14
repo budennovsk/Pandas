@@ -2,6 +2,10 @@ import numpy
 import pandas as pd
 from scipy.optimize import dual_annealing
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 
 
@@ -764,7 +768,9 @@ def er():
     mse = mean_squared_error(X, pd.DataFrame(np.real(reconstructed_data)))
     print(round(mse, 30))
     print(mean_absolute_error(X, pd.DataFrame(np.real(reconstructed_data))))
-def gy():
+def pca_1():
+    import matplotlib.pyplot as plt
+    import seaborn as sns
     import numpy as np
     from sklearn.decomposition import PCA
     from sklearn.preprocessing import StandardScaler
@@ -788,6 +794,10 @@ def gy():
     X_10.loc[:, 0::10] = X_max_10.values
     X_10[other_columns] = mean_values.values
     X_10 = X_10.head(1)
+    y = res['Percentage_Sales_rub'].to_numpy()
+
+    X_10_max = pd.DataFrame(res[res.columns[6:]].max().values.reshape(1, -1))
+
     # Ваш массив данных
     data = X
 
@@ -802,17 +812,20 @@ def gy():
 
 
     # Применение метода главных компонент
-    pca = PCA(n_components=0.95,whiten=True)
+    pca = PCA(n_components=8, random_state=42, svd_solver='full', whiten=True)
 
-    projected_data = pca.fit_transform(scaled_data)
-    projected_data_1 = pca.transform(scaled_data_1)
+    projected_data = pca.fit_transform(data)
+    projected_data_1 = pca.transform(X_10)
     print('covariance')
     print(projected_data_1)
 
 
     # Возвращение к исходным значениям
-    reconstructed_data = scaler.inverse_transform(pca.inverse_transform(projected_data))
-    reconstructed_data_1 = scaler.inverse_transform(pca.inverse_transform(projected_data_1))
+    # reconstructed_data = scaler.inverse_transform(pca.inverse_transform(projected_data))
+    # reconstructed_data_1 = scaler.inverse_transform(pca.inverse_transform(projected_data_1))
+
+    reconstructed_data = pca.inverse_transform(projected_data)
+    reconstructed_data_1 = pca.inverse_transform(projected_data_1)
 
     print(X)
     # Вывод восстановленных данных
@@ -825,10 +838,51 @@ def gy():
     mse = mean_squared_error(X.values.tolist(), pd.DataFrame(reconstructed_data).values.tolist())
     print(round(mse,30))
     print(mean_absolute_error(X, pd.DataFrame(reconstructed_data)))
+    print('___')
+    print(mean_absolute_error(X_10, pd.DataFrame(reconstructed_data_1)))
+    print('___')
+    print(X_10.iloc[:, 0::10])
+    print(pd.DataFrame(reconstructed_data_1[0][0::10].reshape(1,-1)))
+
+    print('___')
+    print(mean_absolute_error(X_10.iloc[:,0::10], pd.DataFrame(reconstructed_data_1[0][0::10].reshape(1,-1))))
+
+    # # Создание графика
+    # sns.set()  # Настройка стиля seaborn по умолчанию
+    # plt.figure(figsize=(8, 6))  # Создание фигуры графика
+    #
+    # # Построение линий для каждого вектора данных
+    # for i in range(len(projected_data)):
+    #     plt.plot(projected_data[i], label=f'Вектор {i + 1}')
+    #
+    # plt.xlabel('Индекс')  # Название оси x
+    # plt.ylabel('Значение')  # Название оси y
+    # plt.title('Визуализация данных для 10 векторов')  # Заголовок графика
+    # plt.legend()  # Отображение легенды
+    #
+    # plt.show()  # Отображение графика
+
+
+    # # Визуализация данных в двумерном пространстве
+    # plt.scatter(projected_data[:, 0], projected_data[:, 1], c=y)
+    # plt.xlabel('t-SNE Dimension 1')
+    # plt.ylabel('t-SNE Dimension 2')
+    # plt.title('t-SNE Visualization of Iris Dataset')
+    # plt.show()
+
+    # tsvd2D_df = pd.DataFrame(data=projected_data, columns=['x', 'y'])
+    # tsvd2D_df['cluster'] = y
+    #
+    # sns.scatterplot(x='x', y='y', hue='cluster', data=tsvd2D_df)
+    # plt.title("TruncatedSVD")
+    # plt.show()
 
 def ica():
     import numpy as np
     from sklearn.decomposition import KernelPCA
+    from sklearn.metrics import mean_absolute_error
+    import matplotlib.pyplot as plt
+    import seaborn as sns
 
 
     pd.set_option('display.max_columns', None)
@@ -849,6 +903,8 @@ def ica():
     X_10[other_columns] = mean_values.values
     X_10 = X_10.head(1)
 
+    y = res['Percentage_Sales_rub'].to_numpy()
+
 
     # Ваша матрица данных
     data = X.to_numpy()
@@ -857,15 +913,16 @@ def ica():
 
 
     # Создаем объект ядерного PCA
-    kpca = KernelPCA(n_components=10, kernel='poly', fit_inverse_transform=True)  # Используем радиальное базисное ядро (RBF kernel)
+    kpca = KernelPCA(n_components=8, kernel='rbf',alpha=0.001, fit_inverse_transform=True, random_state=42)  # Используем радиальное базисное ядро (RBF kernel)
 
     # Применяем ядерный PCA к данным
     X_kpca = kpca.fit_transform(data)
 
     X_kpca1 = kpca.transform(data1)
 
-
-
+    '''3.667213678658044, 12.276249004991566,  44.843923992707545  kernel='rbf',alpha=0.001 '''
+    '''79.70483475026967 , 33.92121755253269 62.11173683433403'''
+    '''25.596688764236628 , 13.139620554771419, 45.015154392326956'''
     # Выполняем обратное преобразование для восстановления исходных значений
     X_inverse = kpca.inverse_transform(X_kpca)
     X_inverse1 = kpca.inverse_transform(X_kpca1)
@@ -884,7 +941,321 @@ def ica():
     print('____')
     print(pd.DataFrame(X_inverse1))
 
+    mse = mean_squared_error(pd.DataFrame(data), pd.DataFrame(X_inverse))
+    print(round(mse, 30))
+    print(mean_absolute_error(pd.DataFrame(data),pd.DataFrame(X_inverse)))
+    print('___')
+    print(mean_absolute_error(pd.DataFrame(data1),pd.DataFrame(X_inverse1)))
+    print('___')
+    print(pd.DataFrame(data1).iloc[:, 0::10])
+    print(pd.DataFrame(X_inverse1[0][0::10].reshape(1, -1)))
 
+    print('___')
+    print(mean_absolute_error(pd.DataFrame(data1).iloc[:, 0::10], pd.DataFrame(X_inverse1[0][0::10].reshape(1, -1))))
+
+
+    '''167.55654103704993 ,  109.42664794907515,  117.58876684444292'''
+    # # Визуализация данных в двумерном пространстве
+    # plt.scatter(X_kpca[:, 0], X_kpca[:, 1], c=y)
+    # plt.xlabel('t-SNE Dimension 1')
+    # plt.ylabel('t-SNE Dimension 2')
+    # plt.title('t-SNE Visualization of Iris Dataset')
+    # plt.show()
+
+    # # Создание графика
+    # sns.set()  # Настройка стиля seaborn по умолчанию
+    # plt.figure(figsize=(8, 6))  # Создание фигуры графика
+    #
+    # # Построение линий для каждого вектора данных
+    # for i in range(len(X_kpca)):
+    #     plt.plot(X_kpca[i], label=f'Вектор {i + 1}')
+    #
+    # plt.xlabel('Индекс')  # Название оси x
+    # plt.ylabel('Значение')  # Название оси y
+    # plt.title('Визуализация данных для 10 векторов')  # Заголовок графика
+    # plt.legend()  # Отображение легенды
+    #
+    # plt.show()  # Отображение графика
+
+    # tsvd2D_df = pd.DataFrame(data=X_kpca, columns=['x', 'y'])
+    # tsvd2D_df['cluster'] = y
+    #
+    # sns.scatterplot(x='x', y='y', hue='cluster', data=tsvd2D_df)
+    # plt.title("TruncatedSVD")
+    # plt.show()
+
+
+def tsne():
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+    from sklearn.manifold import TSNE
+    import seaborn as sns
+
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
+    X = res[res.columns[6:]]
+    X_a = res.iloc[1, 6:]
+    X_1 = pd.DataFrame(X_a.values.reshape(1, -1))
+
+    X_10 = res[res.columns[6:]].copy()
+    X_max_10 = X_10.iloc[:, 0::10].max()
+    other_columns = X_10.columns.difference(X_10.columns[0::10])
+    # Генерация случайных чисел в диапазоне от 1 до 10
+    random_values = np.random.uniform(1.01, 1.10, size=90)
+
+    mean_values = X_10[other_columns].mean() * random_values
+
+    X_10.loc[:, 0::10] = X_max_10.values
+    X_10[other_columns] = mean_values.values
+    X_10 = X_10.head(1)
+
+    # Ваша матрица данных
+    data = X.to_numpy()
+
+    data1 = X_10.to_numpy()
+
+    # Загружаем набор данных Iris
+    data = np.random.rand(10, 100)
+    print(data.shape)
+    X = X.to_numpy()
+    print(X.shape)
+
+    y = res['Percentage_Sales_rub'].to_numpy()
+
+
+
+    # Применяем алгоритм t-SNE для снижения размерности данных до 2D
+
+    perplexity = min(30, X.shape[0] - 1)  # Примерное правило выбора perplexity
+    print(perplexity)
+    tsne = TSNE(n_components=2,method='exact', perplexity=perplexity, random_state=42)
+    print('q1')
+    print(X.shape)
+    X_tsne = tsne.fit_transform(X)
+
+    print(X_tsne)
+    print('q2')
+    tsvd2D_df = pd.DataFrame(data=X_tsne, columns=['x', 'y'])
+    tsvd2D_df['cluster'] = y
+
+    sns.scatterplot(x='x', y='y', hue='cluster', data=tsvd2D_df)
+    plt.title("TruncatedSVD")
+    plt.show()
+
+
+    # # Визуализация данных в двумерном пространстве
+    # plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=y)
+    # plt.xlabel('t-SNE Dimension 1')
+    # plt.ylabel('t-SNE Dimension 2')
+    # plt.title('t-SNE Visualization of Iris Dataset')
+    # plt.show()
+
+def FastICA():
+    from sklearn.decomposition import FastICA
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+
+    import seaborn as sns
+
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
+    X = res[res.columns[6:]]
+    X_a = res.iloc[1, 6:]
+    X_1 = pd.DataFrame(X_a.values.reshape(1, -1))
+
+    y = res['Percentage_Sales_rub'].to_numpy()
+
+    X_10 = res[res.columns[6:]].copy()
+    X_max_10 = X_10.iloc[:, 0::10].max()
+    other_columns = X_10.columns.difference(X_10.columns[0::10])
+    # Генерация случайных чисел в диапазоне от 1 до 10
+    random_values = np.random.uniform(1.01, 1.10, size=90)
+
+    mean_values = X_10[other_columns].mean() * random_values
+
+    X_10.loc[:, 0::10] = X_max_10.values
+    X_10[other_columns] = mean_values.values
+    X_10 = X_10.head(1)
+
+    # Ваша матрица данных
+    data = X.to_numpy()
+
+
+    data1 = X_10.to_numpy()
+
+    ica2D = FastICA(n_components=8, random_state=42)
+    ica_data2D = ica2D.fit_transform(data)
+    ica_data2D_1 = ica2D.transform(data1)
+
+    revers = ica2D.inverse_transform(ica_data2D)
+    revers_1 = ica2D.inverse_transform(ica_data2D_1)
+
+
+    print(X)
+
+    print(pd.DataFrame(revers))
+
+    mse = mean_squared_error(pd.DataFrame(data), pd.DataFrame(revers))
+    print(round(mse, 30))
+    print(mean_absolute_error(pd.DataFrame(data), pd.DataFrame(revers)))
+    print('___')
+
+    print(X_10)
+
+    print(pd.DataFrame(revers_1))
+
+    mse = mean_squared_error(X_10, pd.DataFrame(revers_1))
+    print(round(mse, 30))
+    print(mean_absolute_error(X_10, pd.DataFrame(revers_1)))
+    print('___')
+
+
+    print(pd.DataFrame(data1).iloc[:, 0::10])
+    print(pd.DataFrame(revers_1[0][0::10].reshape(1, -1)))
+
+    print('___')
+    print(mean_absolute_error(pd.DataFrame(data1).iloc[:, 0::10], pd.DataFrame(revers_1[0][0::10].reshape(1, -1))))
+
+    '''7.127513507707408 14.551747135557182 47.49917585158504'''
+    #
+    # ica2D_df = pd.DataFrame(data=ica_data2D, columns=['x', 'y'])
+    #
+    # ica2D_df['cluster'] = y
+    #
+    # sns.scatterplot(x='x', y='y', hue='cluster', data=ica2D_df)
+    # plt.title("ICA")
+    # # plt.show()
+    #
+    # # Создание графика
+    # sns.set()  # Настройка стиля seaborn по умолчанию
+    # plt.figure(figsize=(8, 6))  # Создание фигуры графика
+    #
+    # # Построение линий для каждого вектора данных
+    # for i in range(len(ica_data2D)):
+    #     plt.plot(ica_data2D[i], label=f'Вектор {i + 1}')
+    #
+    # plt.xlabel('Индекс')  # Название оси x
+    # plt.ylabel('Значение')  # Название оси y
+    # plt.title('Визуализация данных для 10 векторов')  # Заголовок графика
+    # plt.legend()  # Отображение легенды
+    #
+    # plt.show()  # Отображение графика
+
+def MDS():
+
+
+    from sklearn.manifold import MDS
+
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
+    X = res[res.columns[6:]]
+    X_a = res.iloc[1, 6:]
+    X_1 = pd.DataFrame(X_a.values.reshape(1, -1))
+
+    y = res['Percentage_Sales_rub'].to_numpy()
+
+    X_10 = res[res.columns[6:]].copy()
+    X_max_10 = X_10.iloc[:, 0::10].min()
+    other_columns = X_10.columns.difference(X_10.columns[0::10])
+    # Генерация случайных чисел в диапазоне от 1 до 10
+    random_values = np.random.uniform(1.01, 1.10, size=90)
+
+    mean_values = X_10[other_columns].mean() * random_values
+
+    X_10.loc[:, 0::10] = X_max_10.values
+    X_10[other_columns] = mean_values.values
+    X_10 = X_10.head(1)
+
+    # Ваша матрица данных
+    data = X.to_numpy()
+
+    data1 = X_10.to_numpy()
+
+    mds2D = MDS(n_components=2, random_state=42)
+
+    mds_data2D = mds2D.fit_transform(data)
+
+    mds2D_df = pd.DataFrame(data=mds_data2D, columns=['x', 'y'])
+
+    mds2D_df['cluster'] = y
+
+    sns.scatterplot(x='x', y='y', hue='cluster', data=mds2D_df)
+    plt.title("MDS")
+    plt.show()
+
+
+
+def UPA():
+    from umap.umap_ import UMAP
+    import numba
+
+
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
+    X = res[res.columns[6:]]
+    X_a = res.iloc[1, 6:]
+    X_1 = pd.DataFrame(X_a.values.reshape(1, -1))
+
+    y = res['Percentage_Sales_rub'].to_numpy()
+
+    X_10 = res[res.columns[6:]].copy()
+    X_max_10 = X_10.iloc[:, 0::10].min()
+    other_columns = X_10.columns.difference(X_10.columns[0::10])
+    # Генерация случайных чисел в диапазоне от 1 до 10
+    random_values = np.random.uniform(1.01, 1.10, size=90)
+
+    mean_values = X_10[other_columns].mean() * random_values
+
+    X_10.loc[:, 0::10] = X_max_10.values
+    X_10[other_columns] = mean_values.values
+    X_10 = X_10.head(1)
+
+    # Ваша матрица данных
+    data = X.to_numpy()
+
+    data1 = X_10.to_numpy()
+
+    umap2D = UMAP(n_components=8,random_state=42)
+    umap_data2D = umap2D.fit_transform(data)
+    umap_data2D_1 = umap2D.transform(data1)
+
+
+    revers = umap2D.inverse_transform(umap_data2D)
+    revers_1 = umap2D.inverse_transform(umap_data2D_1)
+
+    print(X)
+
+    print(pd.DataFrame(revers))
+
+    mse = mean_squared_error(pd.DataFrame(data), pd.DataFrame(revers))
+    print(round(mse, 30))
+    print(mean_absolute_error(pd.DataFrame(data), pd.DataFrame(revers)))
+    print('___')
+
+    print(X_10)
+
+    print(pd.DataFrame(revers_1))
+
+    mse = mean_squared_error(X_10, pd.DataFrame(revers_1))
+    print(round(mse, 30))
+    print(mean_absolute_error(X_10, pd.DataFrame(revers_1)))
+    print('___')
+
+    print(pd.DataFrame(data1).iloc[:, 0::10])
+    print(pd.DataFrame(revers_1[0][0::10].reshape(1, -1)))
+
+    print('___')
+    print(mean_absolute_error(pd.DataFrame(data1).iloc[:, 0::10], pd.DataFrame(revers_1[0][0::10].reshape(1, -1))))
+
+    # umap2D_df = pd.DataFrame(data=umap_data2D, columns=['x', 'y'])
+    #
+    # umap2D_df['cluster'] = y
+    #
+    # sns.scatterplot(x='x', y='y', hue='cluster', data=umap2D_df)
+    # plt.title("UMAP")
+    # plt.show()
 
 if __name__ == '__main__':
     # optimize()
@@ -907,5 +1278,9 @@ if __name__ == '__main__':
     # max_10()
     # tr()
     # er()
-    # gy()
-    ica()
+    # pca_1()
+    # ica()
+    # tsne()
+    # FastICA()
+    # MDS()
+    UPA()
