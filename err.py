@@ -5,8 +5,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
 import seaborn as sns
 import matplotlib.pyplot as plt
-
-
+from sklearn.preprocessing import StandardScaler
 
 
 def optimize():
@@ -905,12 +904,19 @@ def ica():
 
     y = res['Percentage_Sales_rub'].to_numpy()
 
-
     # Ваша матрица данных
     data = X.to_numpy()
 
     data1 = X_10.to_numpy()
 
+
+
+    # data = res.iloc[1:, 6:].T
+    # print(data.shape)
+    # data1 = X_10.T
+    # print(data1.shape)
+    # y = res.iloc[0, 6:].values.reshape(100, 1)
+    # print(y.shape)
 
     # Создаем объект ядерного PCA
     kpca = KernelPCA(n_components=8, kernel='rbf',alpha=0.001, fit_inverse_transform=True, random_state=42)  # Используем радиальное базисное ядро (RBF kernel)
@@ -984,6 +990,12 @@ def ica():
     # plt.title("TruncatedSVD")
     # plt.show()
 
+    # Визуализация главных компонент
+    plt.scatter(X_kpca[:, 0], X_kpca[:, 1], c=y)
+    plt.xlabel('Главная компонента 1')
+    plt.ylabel('Главная компонента 2')
+    plt.title('Визуализация главных компонент')
+    plt.show()
 
 def tsne():
     import numpy as np
@@ -1010,38 +1022,46 @@ def tsne():
     X_10[other_columns] = mean_values.values
     X_10 = X_10.head(1)
 
-    # Ваша матрица данных
-    data = X.to_numpy()
+    # # Ваша матрица данных
+    # data = X.to_numpy()
+    #
+    # data1 = X_10.to_numpy()
 
-    data1 = X_10.to_numpy()
+
+    data = res.iloc[1:, 6:].T
+
+    y = res.iloc[0, 6:].values.reshape(100, 1)
 
     # Загружаем набор данных Iris
-    data = np.random.rand(10, 100)
-    print(data.shape)
-    X = X.to_numpy()
-    print(X.shape)
+    # data = np.random.rand(10, 100)
+    # print(data.shape)
+    # X = X.to_numpy()
+    # print(X.shape)
 
-    y = res['Percentage_Sales_rub'].to_numpy()
+    # y = res['Percentage_Sales_rub'].to_numpy()
 
+    # Шкалирование данных
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data)
 
 
     # Применяем алгоритм t-SNE для снижения размерности данных до 2D
 
-    perplexity = min(30, X.shape[0] - 1)  # Примерное правило выбора perplexity
+    perplexity = min(30, data.shape[0] - 1)  # Примерное правило выбора perplexity
     print(perplexity)
     tsne = TSNE(n_components=2,method='exact', perplexity=perplexity, random_state=42)
     print('q1')
     print(X.shape)
-    X_tsne = tsne.fit_transform(X)
+    X_tsne = tsne.fit_transform(scaled_data)
 
-    print(X_tsne)
-    print('q2')
-    tsvd2D_df = pd.DataFrame(data=X_tsne, columns=['x', 'y'])
-    tsvd2D_df['cluster'] = y
-
-    sns.scatterplot(x='x', y='y', hue='cluster', data=tsvd2D_df)
-    plt.title("TruncatedSVD")
-    plt.show()
+    # print(X_tsne)
+    # print('q2')
+    # tsvd2D_df = pd.DataFrame(data=X_tsne, columns=['x', 'y'])
+    # tsvd2D_df['cluster'] = y
+    #
+    # sns.scatterplot(x='x', y='y', hue='cluster', data=tsvd2D_df)
+    # plt.title("TruncatedSVD")
+    # plt.show()
 
 
     # # Визуализация данных в двумерном пространстве
@@ -1050,6 +1070,13 @@ def tsne():
     # plt.ylabel('t-SNE Dimension 2')
     # plt.title('t-SNE Visualization of Iris Dataset')
     # plt.show()
+
+    # Визуализация главных компонент
+    plt.scatter(X_tsne [:, 0], X_tsne [:, 1], c=y)
+    plt.xlabel('Главная компонента 1')
+    plt.ylabel('Главная компонента 2')
+    plt.title('Визуализация главных компонент')
+    plt.show()
 
 def FastICA():
     from sklearn.decomposition import FastICA
@@ -1079,18 +1106,23 @@ def FastICA():
     X_10[other_columns] = mean_values.values
     X_10 = X_10.head(1)
 
-    # Ваша матрица данных
-    data = X.to_numpy()
+    # # Ваша матрица данных
+    # data = X.to_numpy()
+    #
+    #
+    # data1 = X_10.to_numpy()
+
+    data = res.iloc[1:, 6:].T
+
+    y = res.iloc[0, 6:].values.reshape(100, 1)
 
 
-    data1 = X_10.to_numpy()
-
-    ica2D = FastICA(n_components=8, random_state=42)
+    ica2D = FastICA(n_components=2, random_state=42)
     ica_data2D = ica2D.fit_transform(data)
-    ica_data2D_1 = ica2D.transform(data1)
+    # ica_data2D_1 = ica2D.transform(data1)
 
     revers = ica2D.inverse_transform(ica_data2D)
-    revers_1 = ica2D.inverse_transform(ica_data2D_1)
+    # revers_1 = ica2D.inverse_transform(ica_data2D_1)
 
 
     print(X)
@@ -1104,19 +1136,19 @@ def FastICA():
 
     print(X_10)
 
-    print(pd.DataFrame(revers_1))
+    # print(pd.DataFrame(revers_1))
 
-    mse = mean_squared_error(X_10, pd.DataFrame(revers_1))
-    print(round(mse, 30))
-    print(mean_absolute_error(X_10, pd.DataFrame(revers_1)))
+    # mse = mean_squared_error(X_10, pd.DataFrame(revers_1))
+    # print(round(mse, 30))
+    # print(mean_absolute_error(X_10, pd.DataFrame(revers_1)))
     print('___')
 
 
-    print(pd.DataFrame(data1).iloc[:, 0::10])
-    print(pd.DataFrame(revers_1[0][0::10].reshape(1, -1)))
+    # print(pd.DataFrame(data1).iloc[:, 0::10])
+    # print(pd.DataFrame(revers_1[0][0::10].reshape(1, -1)))
 
     print('___')
-    print(mean_absolute_error(pd.DataFrame(data1).iloc[:, 0::10], pd.DataFrame(revers_1[0][0::10].reshape(1, -1))))
+    # print(mean_absolute_error(pd.DataFrame(data1).iloc[:, 0::10], pd.DataFrame(revers_1[0][0::10].reshape(1, -1))))
 
     '''7.127513507707408 14.551747135557182 47.49917585158504'''
     #
@@ -1143,6 +1175,13 @@ def FastICA():
     #
     # plt.show()  # Отображение графика
 
+    # Визуализация главных компонент
+    plt.scatter(ica_data2D[:, 0], ica_data2D[:, 1], c=y)
+    plt.xlabel('Главная компонента 1')
+    plt.ylabel('Главная компонента 2')
+    plt.title('Визуализация главных компонент')
+    plt.show()
+
 def MDS():
 
 
@@ -1167,28 +1206,46 @@ def MDS():
     X_10.loc[:, 0::10] = X_max_10.values
     X_10[other_columns] = mean_values.values
     X_10 = X_10.head(1)
+    #
+    # # Ваша матрица данных
+    # data = X.to_numpy()
+    #
+    # data1 = X_10.to_numpy()
 
-    # Ваша матрица данных
-    data = X.to_numpy()
+    data = res.iloc[1:, 6:].T
 
-    data1 = X_10.to_numpy()
+    y = res.iloc[0, 6:].values.reshape(100, 1)
+
+    # Шкалирование данных
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data)
+
 
     mds2D = MDS(n_components=2, random_state=42)
 
-    mds_data2D = mds2D.fit_transform(data)
+    mds_data2D = mds2D.fit_transform(scaled_data)
 
-    mds2D_df = pd.DataFrame(data=mds_data2D, columns=['x', 'y'])
+    #
+    # mds2D_df = pd.DataFrame(data=mds_data2D, columns=['x', 'y'])
+    #
+    # mds2D_df['cluster'] = y
+    #
+    # sns.scatterplot(x='x', y='y', hue='cluster', data=mds2D_df)
+    # plt.title("MDS")
+    # plt.show()
 
-    mds2D_df['cluster'] = y
-
-    sns.scatterplot(x='x', y='y', hue='cluster', data=mds2D_df)
-    plt.title("MDS")
+    # Визуализация главных компонент
+    plt.scatter(mds_data2D[:, 0],  mds_data2D[:, 1], c=y)
+    plt.xlabel('Главная компонента 1')
+    plt.ylabel('Главная компонента 2')
+    plt.title('Визуализация главных компонент')
     plt.show()
 
 
 
 def UPA():
     from umap.umap_ import UMAP
+    from sklearn.preprocessing import StandardScaler
     import numba
 
 
@@ -1201,7 +1258,7 @@ def UPA():
     y = res['Percentage_Sales_rub'].to_numpy()
 
     X_10 = res[res.columns[6:]].copy()
-    X_max_10 = X_10.iloc[:, 0::10].min()
+    X_max_10 = X_10.iloc[:, 0::10].max()
     other_columns = X_10.columns.difference(X_10.columns[0::10])
     # Генерация случайных чисел в диапазоне от 1 до 10
     random_values = np.random.uniform(1.01, 1.10, size=90)
@@ -1212,18 +1269,27 @@ def UPA():
     X_10[other_columns] = mean_values.values
     X_10 = X_10.head(1)
 
-    # Ваша матрица данных
-    data = X.to_numpy()
+    # # Ваша матрица данных
+    # data = X.to_numpy()
+    #
+    # data1 = X_10.to_numpy()
 
-    data1 = X_10.to_numpy()
+    data = res.iloc[1:, 6:].T
 
-    umap2D = UMAP(n_components=8,random_state=42)
-    umap_data2D = umap2D.fit_transform(data)
-    umap_data2D_1 = umap2D.transform(data1)
+    y = res.iloc[0, 6:].values.reshape(100, 1)
+
+    # Шкалирование данных
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data)
+
+
+    umap2D = UMAP(n_components=2,random_state=42)
+    umap_data2D = umap2D.fit_transform(scaled_data)
+    # umap_data2D_1 = umap2D.transform(data1)
 
 
     revers = umap2D.inverse_transform(umap_data2D)
-    revers_1 = umap2D.inverse_transform(umap_data2D_1)
+    # revers_1 = umap2D.inverse_transform(umap_data2D_1)
 
     print(X)
 
@@ -1236,18 +1302,18 @@ def UPA():
 
     print(X_10)
 
-    print(pd.DataFrame(revers_1))
+    # print(pd.DataFrame(revers_1))
 
-    mse = mean_squared_error(X_10, pd.DataFrame(revers_1))
-    print(round(mse, 30))
-    print(mean_absolute_error(X_10, pd.DataFrame(revers_1)))
+    # mse = mean_squared_error(X_10, pd.DataFrame(revers_1))
+    # print(round(mse, 30))
+    # print(mean_absolute_error(X_10, pd.DataFrame(revers_1)))
+    # print('___')
+
+    # print(pd.DataFrame(data1).iloc[:, 0::10])
+    # print(pd.DataFrame(revers_1[0][0::10].reshape(1, -1)))
+
     print('___')
-
-    print(pd.DataFrame(data1).iloc[:, 0::10])
-    print(pd.DataFrame(revers_1[0][0::10].reshape(1, -1)))
-
-    print('___')
-    print(mean_absolute_error(pd.DataFrame(data1).iloc[:, 0::10], pd.DataFrame(revers_1[0][0::10].reshape(1, -1))))
+    # print(mean_absolute_error(pd.DataFrame(data1).iloc[:, 0::10], pd.DataFrame(revers_1[0][0::10].reshape(1, -1))))
 
     # umap2D_df = pd.DataFrame(data=umap_data2D, columns=['x', 'y'])
     #
@@ -1256,6 +1322,66 @@ def UPA():
     # sns.scatterplot(x='x', y='y', hue='cluster', data=umap2D_df)
     # plt.title("UMAP")
     # plt.show()
+
+    # Визуализация главных компонент
+    plt.scatter(umap_data2D[:, 0], umap_data2D[:, 1], c=y)
+    plt.xlabel('Главная компонента 1')
+    plt.ylabel('Главная компонента 2')
+    plt.title('Визуализация главных компонент')
+    plt.show()
+
+def isomap():
+    import numpy as np
+    from sklearn.manifold import Isomap
+    import matplotlib.pyplot as plt
+
+    data = res.iloc[1:, 6:].T
+
+    y = res.iloc[0, 6:].values.reshape(100, 1)
+
+    # Шкалирование данных
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data)
+
+
+    # Создадим экземпляр класса Isomap с 2 компонентами
+    isomap = Isomap(n_components=2)
+
+    # Применим алгоритм Isomap к данным
+    embedding = isomap.fit_transform(scaled_data)
+
+    # Выведем результаты
+    print(embedding)
+
+    # Визуализация главных компонент
+    plt.scatter(embedding[:, 0], embedding[:, 1], c=y)
+    plt.xlabel('Главная компонента 1')
+    plt.ylabel('Главная компонента 2')
+    plt.title('Визуализация главных компонент')
+    plt.show()
+
+def lle():
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.manifold import LocallyLinearEmbedding
+
+    data = res.iloc[1:, 6:].T
+
+    y = res.iloc[0, 6:].values.reshape(100, 1)
+
+    # Создадим экземпляр класса LLE с 2 компонентами
+    lle = LocallyLinearEmbedding(n_components=2, n_neighbors=10, random_state=42)
+
+    # Применим метод LLE к данным
+    transformed_data = lle.fit_transform(data)
+
+    # Визуализация результата
+    plt.scatter(transformed_data[:, 0], transformed_data[:, 1], c=y)
+    plt.xlabel('Первая компонента')
+    plt.ylabel('Вторая компонента')
+    plt.title('Визуализация методом LLE')
+    plt.show()
+
 
 if __name__ == '__main__':
     # optimize()
@@ -1279,8 +1405,10 @@ if __name__ == '__main__':
     # tr()
     # er()
     # pca_1()
-    # ica()
+    ica()
     # tsne()
     # FastICA()
     # MDS()
-    UPA()
+    # UPA()
+    # isomap()
+    # lle()

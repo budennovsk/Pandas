@@ -1,4 +1,5 @@
 import pandas as pd
+res = pd.read_excel('ML_manufacture_second_all_10_HYPER_Батончики_Супермаркет.xlsx')
 
 
 def cov_matrix():
@@ -147,6 +148,68 @@ def FastICA():
     plt.title("TruncatedSVD")
     plt.show()
 
+def isomap():
+    import numpy as np
+    from sklearn.manifold import Isomap
+    import matplotlib.pyplot as plt
+
+    # Сгенерируем случайные данные с размерностью (10, 100)
+    data = np.random.rand(100, 10)
+
+    # Создадим экземпляр класса Isomap с 2 компонентами
+    isomap = Isomap(n_components=2)
+
+    # Применим алгоритм Isomap к данным
+    embedding = isomap.fit_transform(data)
+
+    # Выведем результаты
+    print(embedding)
+
+    # Визуализация главных компонент
+    plt.scatter(embedding[:, 0], embedding[:, 1])
+    plt.xlabel('Главная компонента 1')
+    plt.ylabel('Главная компонента 2')
+    plt.title('Визуализация главных компонент')
+    plt.show()
+
+
+def roc():
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+
+
+    X = res.iloc[1:,6:].T
+    y = res.iloc[0, 6:].values.reshape(100, 1)
+    print(X.shape)
+    print(y.shape)
+
+    # Шкалирование данных
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(X)
+    print(scaled_data)
+
+
+    # Сгенерируем случайные данные с размерностью (100, 2)
+    data = np.random.rand(100, 2)
+
+    # Создадим экземпляр класса PCA с 2 компонентами
+    pca = PCA(n_components=2)
+
+    # Применим алгоритм PCA к данным+
+    pca.fit(scaled_data)
+
+    # Преобразуем исходные данные с помощью главных компонент
+    transformed_data = pca.transform(scaled_data)
+
+    # Визуализация главных компонент
+    plt.scatter(transformed_data[:, 0], transformed_data[:, 1], c=y)
+    plt.xlabel('Главная компонента 1')
+    plt.ylabel('Главная компонента 2')
+    plt.title('Визуализация главных компонент')
+    plt.show()
+
 
 if __name__ == '__main__':
     # cov_matrix()
@@ -154,4 +217,6 @@ if __name__ == '__main__':
     # l1()
     # gg()
     # matlibsabon()
-    FastICA()
+    # FastICA()
+    # isomap()
+    roc()
