@@ -36,6 +36,7 @@ def PCA(num_comp):
     # Min values
     X_10_min = res[res.columns[6:]].copy()
     X_min_10 = X_10_min.iloc[:, 0::10].min()
+    print(X_10_min.iloc[:, 0::10].min())
     other_columns_min = X_10_min.columns.difference(X_10_min.columns[0::10])
     # Генерация случайных чисел в диапазоне от 1 до 10
     random_values_min = np.random.uniform(1.01, 1.1, size=90)
