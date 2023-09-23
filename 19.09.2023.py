@@ -21,7 +21,11 @@ data4 = ['fff',333,444,555,6666,777]
 workbook = xlsxwriter.Workbook(filename=file_name)
 worksheet = workbook.add_worksheet()
 
-
+'''SELECT {[Measures].[YearNo], [Measures].[MonthNo]} ON COLUMNS,
+NON EMPTY {[FactTable_b2].[YearNo].Members * [FactTable_b2].[MonthNo].Members} ON ROWS
+FROM [YourCubeName]
+ORDER BY [Выражение для сортировки] [ASC|DESC]
+'''
 
 
 start_row = 0  # Начальная строка для записи данных
