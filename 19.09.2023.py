@@ -122,3 +122,42 @@ q3 [('HYPER', 'Конфеты', 'Хард-дискаунтер', 482.16233789278
 number = 486834448
 formatted_number = '{:,}'.format(number)
 print(formatted_number)
+
+
+kol = [2,4,6,1]
+for i in kol:
+    if i==2:
+        print('2')
+        fov = 333
+    else:
+        print('else')
+        print(fov)
+        fov
+    print(fov-111)
+    print(fov-100)
+#     match i:
+#         case 2:
+#             print('2')
+#             fov = 333
+#         case 4:
+#             print('4')
+#             v = fov+1
+#             print(v)
+#         case 6:
+#             print('6')
+#         case 1:
+#             print('1')
+#     print(fov+10)
+#     fov
+# print(fov-100)
+
+import pandas as pd
+
+# Создание датафрейма
+df = pd.DataFrame([1, 5, 3, 2, 4],
+                  ['у', 'b', 'c', 'd', 'e'])
+
+# Сортировка по убыванию
+sorted_df = df.sort_values(by=[1], ascending=False)
+print(sorted_df)
+
