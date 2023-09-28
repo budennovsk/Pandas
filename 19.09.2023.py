@@ -122,7 +122,7 @@ q3 [('HYPER', 'Конфеты', 'Хард-дискаунтер', 482.16233789278
 number = 486834448
 formatted_number = '{:,}'.format(number)
 print(formatted_number)
-
+print('dd')
 
 kol = [2,4,6,1]
 for i in kol:
