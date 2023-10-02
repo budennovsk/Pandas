@@ -151,13 +151,33 @@ for i in kol:
 #     fov
 # print(fov-100)
 
-import pandas as pd
+# import pandas as pd
+#
+# # Создание датафрейма
+# df = pd.DataFrame([1, 5, 3, 2, 4],
+#                   ['у', 'b', 'c', 'd', 'e'])
+#
+# # Сортировка по убыванию
+# sorted_df = df.sort_index(by=[0], ascending=False)
+# print(sorted_df)
 
-# Создание датафрейма
-df = pd.DataFrame([1, 5, 3, 2, 4],
-                  ['у', 'b', 'c', 'd', 'e'])
+print('___________')
+month = [12]
+range_month = list(range(min(month), max(month) + 1))
+print(range_month)
+expression = '* {'
 
-# Сортировка по убыванию
-sorted_df = df.sort_values(by=[1], ascending=False)
-print(sorted_df)
 
+for num in range_month:
+    expression += f'''[Dates].[Month_num].&[{num}], '''
+expression += '}'
+print(expression)
+filter_month = expression.replace(", }", "}")
+# filter_month = expression[:expression.rfind(',', 0, expression.rfind(','))] + expression[expression.rfind(',', 0,
+#                                                                                                         expression.rfind(
+#                                                                                                             ',')) + 1:]
+print(filter_month)
+
+e = 123
+e = [e]
+print(e)
