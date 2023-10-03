@@ -181,3 +181,8 @@ print(filter_month)
 e = 123
 e = [e]
 print(e)
+data_1 = pd.DataFrame(data=[1,2,3,4,5],columns=['col_1'])
+data_2 = pd.DataFrame(data=[3,4,5,6],columns=['col_2'])
+
+for u, k in enumerate([data_1,data_2]):
+    print(u,'___', k)
