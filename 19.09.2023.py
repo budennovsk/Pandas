@@ -186,3 +186,15 @@ data_2 = pd.DataFrame(data=[3,4,5,6],columns=['col_2'])
 
 for u, k in enumerate([data_1,data_2]):
     print(u,'___', k)
+
+
+from sklearn.metrics import mean_squared_error
+
+y_true = [1, 2, 3]
+y_pred = [2, 3, 4]
+
+# Рассчитываем среднеквадратичную ошибку без возведения в квадрат
+
+
+name, num = ['MSE', 0.4550495848227726]
+print(name, round(num,2))
