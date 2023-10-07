@@ -35,7 +35,27 @@ for i in range(5):
 
 print('_________')
 
+import re
 
 
+ver = "_all_"
+
+if re.fullmatch(r"\_all_\d*", ver) is not None:
+    print('ok')
+if re.fullmatch(r"\_all_\d*", ver) is None:
+
+    print('ok1')
+else:
+    print('no')
+
+print('------------------')
+
+ver = "_a"
+if ver.startswith("_all_") and (ver == "_all_" or re.match(r"_all_\d*_\d{4}", ver)) is not None:
+    print('ok')
+else:
+    print('no')
 
 
+vf ='_all_1_2022'
+print([vf[5:]])
