@@ -1,3 +1,5 @@
+import pandas as pd
+
 for i in range(5):
     print("Внешний цикл:", i)
     for j in range(3):
@@ -59,3 +61,15 @@ else:
 
 vf ='_all_1_2022'
 print([vf[5:]])
+
+print('++++++++++++++++++++==')
+
+data = [[4,3,2,1],[44,55,66,77,88,99,77],[1,2,3,4]]
+
+
+col = range(len(max(data)))
+print(col)
+
+er =pd.DataFrame(data, columns=col)
+print(er)
+
