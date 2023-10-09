@@ -73,3 +73,36 @@ print(col)
 er =pd.DataFrame(data, columns=col)
 print(er)
 
+print('))))))))')
+for i in [10]:
+    count = 10
+    go = 'ress'
+    if go == 'res':
+        print('10')
+    else:
+        i +=2
+qw = [[None, 1614551.7999999998], ['STM TANDER', 940055.47], ['SAVUSHKIN PRODUKT', 138869.89], ['BELSYR', 111510.79000000001], ['BELEBEEVSKIY MK', 83861.94000000002], ['VIMM-BILL-DANN', 81284.27], ['GREYT FUDZ INK', 71629.69], ['OTHER', 65683.25], ['POSTAVSKIY MZ', 37176.61000000001], ['MOLVEST', 28002.13], ['PRUZHANSKIY MK', 22488.5], ['SK LENINGRADSKIY', 19105.800000000003], ['RTK SYRNYY DOM', 7649.55], ['BELOVEZHSKIE SYRY', 2079.87], ['PIENO ZVAIGZDES', 2007.04], ['SYRNAYA DOLINA', 1417.24], ['MILKOM', 1019.97], ['BOBROVSKIY SZ', 709.79], ['AB VILKYSKIU PIENINE', None], ['ABINSKIY MZ', None], ['ADAMS FOODS LTD', None], ['AGRIVOLGA', None], ['AGROFERMA INSKIE PROSTORY', None], ['AGROFIRMA PRIVOL`E', None], ['AGROHOLDING BELOZORIE', None], ['AGROKHOLDING PORECHE', None], ['AGROSILA', None], ['AGROSVET', None], ['AGRO-TREYD', None], ['AGROVAL SA', None], ['AKH ANUYSKOE', None], ['AKSENOVA A.O', None], ['ALAPAEVSKIY MK', None], ['ALDA UNIVERSAL', None], ['ALEJSKIJ MSK', None], ['ALEV', None], ['ALEYSKIY MSK', None], ['ALIGOREKS', None], ['ALLGOY', None], ['ALLORIS', None]]
+count = 0
+for i in qw:
+    print(i[0],'p')
+    if i[0] != 'BELEBEEVSKIY MK':
+        count += 1
+    else:
+        break
+print(count)
+
+# print('1111')
+#
+# print([i if i[0] != 'BELEBEEVSKIY MK' else None for i in qw])
+
+import pandas as pd
+
+data = [[None, 15427379.669999992], ['OTHER', 1911378.1099999999], ['VIMM-BILL-DANN', 1440507.94], ['FRESH FUDS', 1429532.58], ['BOBROVSKIY SZ', 1323507.72], ['NATURA PRO', 1159006.84], ['BELSYR', 1123024.5399999996], ['PRUZHANSKIY MK', 761223.46], ['VOKHOMSKIY SZ', 611548.27], ['VIOLA', 545640.55]]
+
+df = pd.DataFrame(data)
+
+# Select rows up to the row containing 'BELSYR'
+truncated_df = df.iloc[:df.index[df[0] == 'VIMM-BILL-DANN'][0]+2]
+
+print(truncated_df)
+
