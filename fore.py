@@ -106,3 +106,38 @@ truncated_df = df.iloc[:df.index[df[0] == 'VIMM-BILL-DANN'][0]+2]
 
 print(truncated_df)
 
+
+print("))))))))))))))))))")
+for i in range(2):
+    print(i)
+    num_rows_1 = ''
+    num_rows = '10'
+    query = f'''pervoe mesto {num_rows if num_rows_1 !='' else num_rows}'''
+    print(query)
+    if i ==1:
+        num_rows_1 = '20'
+        print(query)
+
+
+
+print('BBBBBBBBbb')
+
+for i in range(2):
+    print(i)
+    num_rows = 10
+    query = lambda: f'''pervoe mesto {num_rows}'''
+    print(query())
+    if i == 1:
+        num_rows = 20
+        print(type(query()))
+
+print('____f________f_________f__')
+
+
+fip = pd.DataFrame(data=[[233, 22], [3, 4], [5,6]], columns=['a', 'b'])
+print(len(fip))
+print(fip)
+if 233 in fip.iloc[:, 0].values:
+    print('ok')
+else:
+    print('no')
