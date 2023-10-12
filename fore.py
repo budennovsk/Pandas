@@ -141,3 +141,19 @@ if 233 in fip.iloc[:, 0].values:
     print('ok')
 else:
     print('no')
+
+
+import logging
+
+# Настройка логгера
+logging.basicConfig(filename='errors.log',filemode='w', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Ваш код с циклами и условием для отлова ошибок
+for i in range(10):
+
+    if i < 5:
+        logging.info(str(i))
+
+
+
+
