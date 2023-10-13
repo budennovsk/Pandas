@@ -9,4 +9,92 @@ logging.basicConfig(filename='errors.log',filemode='w', level=logging.INFO, form
 
 logging.info(str('eeeeeeeeeeeeeeeee'))
 
+print('______________________-')
+
+data = [['NATURA PRO', 1], ['SAVUSHKIN PRODUKT', None], ['VIMM-BILL-DANN', None], ['PIR-PAK', None], ['СТМ OZON', None], ['VIOLA', None], ['PERVAYA LINIYA', None], ['PIENO ZVAIGZDES', None], ['NEVSKIE SYRY', None], ['EKONIVAAGRO', None], ['HOCHLAND', None], ['TUROVSKIY MK', None], ['SER DZHON', None], ['OTHER', None], ['VKUSVILL', None], ['BELOVEZHSKIE SYRY', None], ['MILKOM', None], ['GREYT FUDZ INK', None], ['NALCHIKSKIY MK', None]]
+
+all_none = all(value is None for _, value in data)
+print(all_none)
+
+if all_none:
+    print(True)
+else:
+    print(False)
+
+
+data = [['None', None], ['STM X5', 1975316546.8999887], ['SAVUSHKIN PRODUKT', 674867780.4400012], ['VIMM-BILL-DANN', 250587005.6600004]]
+
+filtered_data = [item for item in data if item[0] is not None]
+
+print(filtered_data)
+
+data = [[None, 3764156098.98999], ['STM X5', 1975316546.8999887], ['SAVUSHKIN PRODUKT', 674867780.4400012], ['VIMM-BILL-DANN', 250587005.6600004]]
+
+data11 = [['ff', 3764156098.98999], ['STM X5', 1975316546.8999887], ['SAVUSHKIN PRODUKT', 674867780.4400012], ['VIMM-BILL-DANN', 250587005.6600004]]
+
+data2 = [['STM X5', None], ['SAVUSHKIN PRODUKT', 674867780.4400012], ['VIMM-BILL-DANN', 250587005.6600004]]
+data3 = [['STM X5', None], ['SAVUSHKIN PRODUKT', None], ['VIMM-BILL-DANN', None]]
+
+data1 = []
+
+print('___________')
+def got():
+    for item in data11:
+
+        if item[0] is not None:
+            data1.append(item)
+            print('NONO item')
+            return data1
+        elif item[1] is None:
+            item[1]=0.001
+            data1.append(item)
+            print('NONE =0.01')
+            return data1
+
+    if all(item[1] is None for item in data):
+        print('NONO_ALL')
+        return []
+    return data11
+
+print(got())
+print('qqqqq')
+
+[[None, 3764156098.98999], ['STM X5', 1975316546.8999887], ['SAVUSHKIN PRODUKT', 674867780.4400012],
+ ['VIMM-BILL-DANN', 250587005.6600004], ['ff', 3764156098.98999], ['STM X5', 1975316546.8999887], ['SAVUSHKIN PRODUKT', 674867780.4400012], ['VIMM-BILL-DANN', 250587005.6600004],['STM X5', None], ['SAVUSHKIN PRODUKT', 674867780.4400012], ['VIMM-BILL-DANN', 250587005.6600004],['STM X5', None], ['SAVUSHKIN PRODUKT', None], ['VIMM-BILL-DANN', None]]
+
+print('____________')
+data = [['None', 'None'], ['SAVUSHKIN PRODUKT', 'None'], ['None', 'None']]
+
+def process_data(data):
+
+
+    if all(item[1] is None for item in data):
+        print('ii')
+        return []
+
+    else:
+        print('q2222222')
+
+        for sublist in data:
+
+            if sublist[0] is None:
+                print('jj')
+                sublist = [item for item in data if item[0] is not None]
+                return sublist
+
+            elif None in sublist[1:]:
+                print('pp')
+
+                sublist = [[item[0], 0.001] if item[1] is None else item for item in data]
+
+                return sublist
+        else:
+            print('ee')
+            return data
+
+        return result
+
+
+
+print(process_data(data))
 
