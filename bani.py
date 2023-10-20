@@ -252,4 +252,41 @@ df['res_index'].fillna(1, inplace=True)
 df['result'] = df['res_index'] * df['promo_sales']
 
 print(df)
+print('____________')
+
+import pandas as pd
+
+# Создание DataFrame с двумя столбцами 'sku' и 'value'
+df = pd.DataFrame({
+    'sku': [1, 2, 3, 4, 5],
+    'value': [10, 20, 30, 40, 50]
+})
+
+# Поиск индекса строки, где значение столбца 'sku' равно 2
+index = df[df['sku'] == 2].index[0]
+
+
+print(index)
+import pandas as pd
+
+# Создание DataFrame с одним столбцом 'sku'
+df = pd.DataFrame({
+    'sku': [1, 1, 1, 1, 1]
+})
+
+# Проверка, все ли значения в столбце 'sku' равны 1
+result = (df['sku'] == 1).all()
+
+print(result)
+num = -0.045
+
+# Поменять знак числа
+num = num * -1
+
+print(num)
+
+
+
+
+
 
