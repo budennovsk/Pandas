@@ -199,3 +199,57 @@ print(new_input, 'res____________3')
 new_input[-1, 2] = current_input[-1, 2]  # остаток
 
 print(new_input)
+print('__________________')
+import pandas as pd
+import numpy as np
+
+# Создание DataFrame с тремя столбцами
+df = pd.DataFrame({
+    'price': np.random.normal(size=10),
+    'promo_sales': np.random.normal(size=10),
+    'res_index': np.concatenate([np.full(3, np.nan), np.random.normal(size=7)])
+})
+
+# Замена значений NaN в столбце res_index
+# df['res_index'].fillna(0, inplace=True)
+
+
+# Умножение столбца res_index на столбец promo_sales и запись результатов в столбец result
+df['result'] = df['res_index'] * df['promo_sales']
+
+
+print(df)
+print('________________')
+import pandas as pd
+import numpy as np
+
+# Создание DataFrame с тремя столбцами
+df = pd.DataFrame({
+    'price': np.random.normal(size=10),
+    'promo_sales': np.random.normal(size=10),
+    'res_index': np.concatenate([np.full(3, np.nan), np.random.normal(size=7)])
+})
+
+# Умножение столбца res_index на столбец promo_sales с условием
+df['result'] = np.where(df['res_index'].isnull(), df['promo_sales'], df['res_index'] * df['promo_sales'])
+
+print(df)
+print('_______________-')
+import pandas as pd
+import numpy as np
+
+# Создание DataFrame с тремя столбцами
+df = pd.DataFrame({
+    'price': np.random.normal(size=10),
+    'promo_sales': np.random.normal(size=10),
+    'res_index': np.concatenate([np.full(3, np.nan), np.random.normal(size=7)])
+})
+
+# Замена значений NaN в столбце res_index на 1
+df['res_index'].fillna(1, inplace=True)
+
+# Умножение столбцев res_index и promo_sales и запись результатов в столбец result
+df['result'] = df['res_index'] * df['promo_sales']
+
+print(df)
+
