@@ -372,3 +372,4 @@ for sku, pred in predictions.items():
     plt.title(f"270 Days Forecast for SKU {sku}")
     plt.show()
 
+
