@@ -344,8 +344,76 @@ for sku_indx, tuple_num in data[1].items():
 
         print(f"Start: {start}, End: {end}")
 
+print("OOOOOOOOOOOOOOO")
+days = 1065
 
 
+def generate_promo_intervals():
+    new_holiday = []
+    starts = np.sort(np.random.choice(np.arange(1, days - 15), size=5, replace=False))
+    tuple_date = [(start, start + 14) for start in starts]
+    for i in range(3):
+        offset = i * 365
+        for key, value in tuple_date:
+
+            new_typle=(key+offset, value+offset)
+            new_holiday.append(new_typle)
+
+    return new_holiday
+
+print(generate_promo_intervals())
+print(')))))))))')
+
+def generate_promo_intervals_1():
+    starts = np.sort(np.random.choice(np.arange(1, 1095 - 15), size=15, replace=False))
+    return [(start, start + 14) for start in starts]
+print(generate_promo_intervals_1())
+
+
+print('________')
+df = pd.DataFrame({'holidays':['1','2','3','4','2','2'], 'lox':[1,2,3,4,5,6]})
+print(df)
+
+# Assuming you have a DataFrame called 'df' with the 'holidays' column
+filtered_values = df[df['holidays'] > '2']['holidays']
+
+
+# Print the filtered values as a list
+print(filtered_values)
+print(']]]]]]]]]]]]]]]')
+
+import pandas as pd
+import numpy as np
+
+data = {
+    'Seasonality': [1.4, 0.9, 1.0, 1.0, 1.1],
+    'Month': [37, 37, 37, 37, 37],
+    'Monthly Seasonality': [1, None, None, None, None],
+    'Holiday Boost': [7.0, 9.0, 11.0, 13.0, 15.0]
+}
+
+df = pd.DataFrame(data)
+
+df = df.fillna(np.nan)
+print(df)
+
+# df = df.fillna(1)
+nan_count = df['Monthly Seasonality'].isna().sum()
+
+print("Number of NaN values in 'Monthly Seasonality':", nan_count)
+
+
+df['res'] = df['Seasonality'] * df['Holiday Boost'] * df['Month'] * df['Monthly Seasonality']
+print(df)
+
+print('+++++++++++=')
+data1 = [0.22164621, 0.18924485, 0.15859712, 0.12980977, 0.10301185, 0.07836377, 0.05607255, 0.03642019, 0.01982464, 0.00700907]
+
+for i in range(len(data1)):
+    if i == 1:
+        data1[i] += 1
+
+print(data1)
 
 
 
