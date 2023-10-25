@@ -1,19 +1,153 @@
+# import tensorflow as tf
+# from tensorflow import keras
+#
+# # Загрузка данных
+# (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+#
+# # Предобработка данных
+# x_train = x_train / 255.0
+# x_test = x_test / 255.0
+#
+# # Определение модели
+# model = keras.Sequential([
+#     keras.layers.Flatten(input_shape=(28, 28)),
+#     keras.layers.Dense(128, activation='relu'),
+#     keras.layers.Dense(10, activation='softmax')
+# ])
+#
+# # Компиляция модели
+# model.compile(optimizer='adam',
+#               loss='sparse_categorical_crossentropy',
+#               metrics=['accuracy'])
+#
+# # Обучение модели
+# history = model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test))
+#
+# # Визуализация метрик обучения
+# import matplotlib.pyplot as plt
+#
+# plt.plot(history.history['accuracy'], label='Training Accuracy')
+# plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+# plt.xlabel('Epoch')
+# plt.ylabel('Accuracy')
+# plt.legend()
+# plt.show()
+#
+#
+#
+# import tensorflow as tf
+# from keras.src.optimizers import Adam
+# from tensorflow import keras
+#
+#
+# # Загрузка данных
+# (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+#
+# # Предобработка данных
+# x_train = x_train / 255.0
+# x_test = x_test / 255.0
+#
+# # Определение модели
+# model = keras.Sequential([
+#     keras.layers.Flatten(input_shape=(28, 28)),
+#     keras.layers.Dense(128, activation='relu'),
+#     keras.layers.Dense(10, activation='softmax')
+# ])
+#
+#
+#
+# # Компиляция модели с оптимизатором Adam
+# model.compile(optimizer=Adam(learning_rate=0.001),
+#               loss='mse',
+#               metrics=['mae'])
+# # Компиляция модели
+#
+#
+#
+# # Определение коллбэка для записи метрик в TensorBoard
+# # tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir='C:/log_Tenser', histogram_freq=1)
+# # callbacks=[tensorboard_callback]
+#
+#
+# # Обучение модели с использованием коллбэка
+# model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test))
+
+
+
+import tensorflow as tf
+from sklearn.model_selection import KFold
 import numpy as np
+from tensorflow.keras.callbacks import EarlyStopping
 
-sku_mse = [[1, 50, -0.0406407956469659], [1, 100, -0.0435242007533022], [1, 150, -0.045909637085911656], [1, 200, -0.04560941406278092], [1, 250, -0.04588839740455133], [1, 300, -0.047191597845827785], [1, 365, -0.05045025773736751], [1, 500, -0.05352652654619059], [2, 50, -0.03813612413784425], [2, 100, -0.03971769865234347], [2, 150, -0.03848825887130783], [2, 200, -0.04116798668715328], [2, 250, -0.04301637891061637], [2, 300, -0.04640303663937741], [2, 365, -0.04813900489413806], [2, 500, -0.050938194993181626], [3, 50, -0.043047870489013054], [3, 100, -0.04679088141373338], [3, 150, -0.04802612905275179], [3, 200, -0.04762705275439413], [3, 250, -0.05275490911618571], [3, 300, -0.05192808879762613], [3, 365, -0.05639464072513224], [3, 500, -0.059344713792390355], [4, 50, -0.04319966286803342], [4, 100, -0.04693451431360872], [4, 150, -0.04783901478578245], [4, 200, -0.05031840977304536], [4, 250, -0.051292838461306056], [4, 300, -0.05266747789702947], [4, 365, -0.055677771978588184], [4, 500, -0.060808719446749496], [5, 50, -0.05099146940110435], [5, 100, -0.05450307610221605], [5, 150, -0.05723326701216398], [5, 200, -0.058357981055837095], [5, 250, -0.05959805790230284], [5, 300, -0.06411155497368232], [5, 365, -0.06671833954754285], [5, 500, -0.07289301233391218], [6, 50, -0.043579293071268], [6, 100, -0.04534956270546998], [6, 150, -0.048549873469712075], [6, 200, -0.04962737298874147], [6, 250, -0.05263376488483522], [6, 300, -0.053456547041747335], [6, 365, -0.057107654522666]]
-min_values = {}
+from tensorflow.keras.callbacks import TensorBoard
 
-for item in sku_mse:
-    sku = item[0]
-    mse = item[2]
 
-    if sku in min_values:
-        if mse < min_values[sku]:
-            min_values[sku] = mse
-    else:
-        min_values[sku] = mse
+# Генерация примера данных
+# X = np.array([[1, 2], [3, 4], [1, 2], [3, 4]])
+# y = np.array([1, 2, 3, 4])
+X = np.random.rand(1000, 2)
+y = np.random.randint(0, 2, size=1000)
 
-for sku, min_mse in min_values.items():
-    print("SKU:", sku)
-    print("Min MSE:", min_mse)
-    print()
+# Инициализация кросс-валидации
+kfold = KFold(n_splits=10, shuffle=True)
+
+
+
+# Создание модели
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.Dense(1, input_dim=2, activation='linear'))
+model.compile(optimizer='adam', loss='mean_squared_error',metrics=['accuracy'])
+
+# Вычисление оценки кросс-валидации
+results = []
+for train_index, test_index in kfold.split(X):
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+
+    # Определение обратного вызова EarlyStopping
+    early_stopping = EarlyStopping(monitor='val_loss', patience=3)
+
+    # Определение пути для сохранения журналов обучения
+    log_dir = "C:/logs_Tenser"
+
+    # Определение обратного вызова TensorBoard
+    tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1, update_freq='epoch',write_images=True)
+
+    model.fit(X_train, y_train, epochs=100, verbose=1,callbacks=[early_stopping,tensorboard_callback], validation_data=(X_test, y_test))
+
+
+    loss = model.evaluate(X_test, y_test, verbose=0)
+    results.append(loss)
+
+print("Результаты кросс-валидации:", results)
+print("Среднее значение результатов:", np.mean(results))
+
+#
+# import tensorflow as tf
+# import numpy as np
+# from tensorflow.keras.callbacks import EarlyStopping
+#
+# # Генерация примера данных
+# X_train = np.random.rand(800, 2)
+# y_train = np.random.randint(0, 2, size=800)
+# X_val = np.random.rand(200, 2)
+# y_val = np.random.randint(0, 2, size=200)
+# # Создание модели
+# model = tf.keras.Sequential()
+# model.add(tf.keras.layers.Dense(1, input_dim=2, activation='linear'))
+# model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy', 'mse'])
+#
+#
+# # Определение пути для сохранения журналов обучения
+# log_dir = "C:/logs_Tenser"
+# early_stopping = EarlyStopping(monitor='val_loss', patience=3)
+#
+# # Определение обратного вызова TensorBoard
+# tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1,update_freq='epoch')
+#
+# # Обучение модели с контролем валидации
+# model.fit(X_train, y_train, epochs=300, verbose=1, callbacks=[tensorboard_callback,early_stopping], validation_data=(X_val, y_val))
+#
+# # Оценка модели на тестовых данных
+# loss = model.evaluate(X_val, y_val, verbose=0)
+# print("Потери на тестовых данных:", loss)

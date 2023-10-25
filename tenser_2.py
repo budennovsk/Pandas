@@ -39,7 +39,7 @@ model = keras.models.Sequential([
     keras.layers.Dense(forecast_days)
 ])
 
-model.compile(loss='mean_squared_error', optimizer='adam')
+model.compile(loss='mean_squared_error', optimizer='adam')  # dfdfdfdfdfdfdf
 model.fit(X_train, y_train, epochs=50, batch_size=32)
 
 X_test = sales_normalized[-sequence_length:].reshape(1, -1, 1)
