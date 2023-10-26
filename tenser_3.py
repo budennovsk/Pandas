@@ -72,55 +72,55 @@
 # # Обучение модели с использованием коллбэка
 # model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test))
 
-
-
-import tensorflow as tf
-from sklearn.model_selection import KFold
-import numpy as np
-from tensorflow.keras.callbacks import EarlyStopping
-
-from tensorflow.keras.callbacks import TensorBoard
-
-
-# Генерация примера данных
-# X = np.array([[1, 2], [3, 4], [1, 2], [3, 4]])
-# y = np.array([1, 2, 3, 4])
-X = np.random.rand(1000, 2)
-y = np.random.randint(0, 2, size=1000)
-
-# Инициализация кросс-валидации
-kfold = KFold(n_splits=10, shuffle=True)
-
-
-
-# Создание модели
-model = tf.keras.Sequential()
-model.add(tf.keras.layers.Dense(1, input_dim=2, activation='linear'))
-model.compile(optimizer='adam', loss='mean_squared_error',metrics=['accuracy'])
-
-# Вычисление оценки кросс-валидации
-results = []
-for train_index, test_index in kfold.split(X):
-    X_train, X_test = X[train_index], X[test_index]
-    y_train, y_test = y[train_index], y[test_index]
-
-    # Определение обратного вызова EarlyStopping
-    early_stopping = EarlyStopping(monitor='val_loss', patience=3)
-
-    # Определение пути для сохранения журналов обучения
-    log_dir = "C:/logs_Tenser"
-
-    # Определение обратного вызова TensorBoard
-    tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1, update_freq='epoch',write_images=True)
-
-    model.fit(X_train, y_train, epochs=100, verbose=1,callbacks=[early_stopping,tensorboard_callback], validation_data=(X_test, y_test))
-
-
-    loss = model.evaluate(X_test, y_test, verbose=0)
-    results.append(loss)
-
-print("Результаты кросс-валидации:", results)
-print("Среднее значение результатов:", np.mean(results))
+#
+#
+# import tensorflow as tf
+# from sklearn.model_selection import KFold
+# import numpy as np
+# from tensorflow.keras.callbacks import EarlyStopping
+#
+# from tensorflow.keras.callbacks import TensorBoard
+#
+#
+# # Генерация примера данных
+# # X = np.array([[1, 2], [3, 4], [1, 2], [3, 4]])
+# # y = np.array([1, 2, 3, 4])
+# X = np.random.rand(1000, 1)
+# y = np.random.randint(0, 2, size=1000)
+#
+# # Инициализация кросс-валидации
+# kfold = KFold(n_splits=3, shuffle=True)
+#
+#
+#
+# # Создание модели
+# model = tf.keras.Sequential()
+# model.add(tf.keras.layers.Dense(1, input_dim=1, activation='linear'))
+# model.compile(optimizer='adam', loss='mean_squared_error',metrics=['accuracy'])
+#
+# # Вычисление оценки кросс-валидации
+# results = []
+# for train_index, test_index in kfold.split(X):
+#     X_train, X_test = X[train_index], X[test_index]
+#     y_train, y_test = y[train_index], y[test_index]
+#
+#     # Определение обратного вызова EarlyStopping
+#     early_stopping = EarlyStopping(monitor='val_loss', patience=3)
+#
+#     # Определение пути для сохранения журналов обучения
+#     log_dir = "C:/logs_Tenser"
+#
+#     # Определение обратного вызова TensorBoard
+#     tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1, update_freq='epoch',write_images=True)
+#
+#     model.fit(X_train, y_train, epochs=100, verbose=1,callbacks=[early_stopping,tensorboard_callback], validation_data=(X_test, y_test))
+#
+#
+#     loss = model.evaluate(X_test, y_test, verbose=0)
+#     results.append(loss)
+#
+# print("Результаты кросс-валидации:", results)
+# print("Среднее значение результатов:", np.mean(results))
 
 #
 # import tensorflow as tf
@@ -151,3 +151,44 @@ print("Среднее значение результатов:", np.mean(results
 # # Оценка модели на тестовых данных
 # loss = model.evaluate(X_val, y_val, verbose=0)
 # print("Потери на тестовых данных:", loss)
+
+#
+import numpy as np
+# from sklearn.model_selection import TimeSeriesSplit
+# from tensorflow.keras.models import Sequential
+# from tensorflow.keras.layers import LSTM, Dense
+#
+# # Генерируем временные ряды
+# time_series = np.arange(1, 101)
+#
+# # Разбиваем временные ряды на временные блоки
+# tscv = TimeSeriesSplit(n_splits=5)
+# for train_index, test_index in tscv.split(time_series):
+#     train_data = time_series[train_index]
+#     test_data = time_series[test_index]
+#
+#     # Создаем и компилируем модель LSTM
+#     model = Sequential()
+#     model.add(LSTM(10, input_shape=(1, 1)))
+#     model.add(Dense(1))
+#     model.compile(optimizer='adam', loss='mse')
+#
+#     # Преобразуем данные в формат, подходящий для модели LSTM
+#     X_train = np.reshape(train_data, (len(train_data), 1, 1))
+#     y_train = np.reshape(train_data, (len(train_data), 1))
+#     X_test = np.reshape(test_data, (len(test_data), 1, 1))
+#     y_test = np.reshape(test_data, (len(test_data), 1))
+#
+#     # Обучаем модель на обучающем наборе данных
+#     model.fit(X_train, y_train, epochs=10, batch_size=1, verbose=0)
+#
+#     # Оцениваем производительность модели на тестовом наборе данных
+#     loss = model.evaluate(X_test, y_test, verbose=0)
+#     print(f"Loss: {loss}")
+
+import numpy as np
+
+data = [np.array([0.09340992, 0.12070766, 0.17080997]), np.array([0.22305561, 0.30798442, 0.3734497])]
+data = np.vstack(data)
+print(data.shape)  # Результат: (2, 3)
+
