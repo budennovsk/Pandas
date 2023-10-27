@@ -154,6 +154,7 @@
 
 #
 import numpy as np
+import pandas as pd
 # from sklearn.model_selection import TimeSeriesSplit
 # from tensorflow.keras.models import Sequential
 # from tensorflow.keras.layers import LSTM, Dense
@@ -186,9 +187,62 @@ import numpy as np
 #     loss = model.evaluate(X_test, y_test, verbose=0)
 #     print(f"Loss: {loss}")
 
-import numpy as np
+# import numpy as np
+#
+# data = [np.array([0.09340992, 0.12070766, 0.17080997]), np.array([0.22305561, 0.30798442, 0.3734497])]
+# data = np.vstack(data)
+# print(data.shape)  # Результат: (2, 3)
+#
+from sklearn.metrics import mean_squared_error
+data_1 = np.random.rand(140, 230)
 
-data = [np.array([0.09340992, 0.12070766, 0.17080997]), np.array([0.22305561, 0.30798442, 0.3734497])]
-data = np.vstack(data)
-print(data.shape)  # Результат: (2, 3)
+data_2 = np.random.rand(140, 230)
 
+
+
+
+df_1 = pd.DataFrame({'data_1': data_1.tolist(), 'data_2': data_2.tolist()})
+
+
+df_1['MSE'] = df_1.apply(lambda row: mean_squared_error(row['data_1'], row['data_2']), axis=1)
+
+print(df_1)
+min_row = df_1.loc[df_1['MSE'].idxmin()]
+max_row = df_1.loc[df_1['MSE'].idxmax()]
+
+print('min',df_1['MSE'].idxmin())
+print('max',df_1['MSE'].idxmax())
+min_mse = df_1.loc[df_1['MSE'].idxmin(),'MSE']
+print(min_mse,'min_mse')
+
+max_mse = df_1.loc[df_1['MSE'].idxmax(),'MSE']
+print(max_mse,'max_mse')
+
+# mean_row = df_1.where(df_1['MSE'] == df_1['MSE'].mean()).idxmin()
+# min_row_index = np.argmin(df_1['MSE'].apply(np.mean))
+# print(min_row_index,'min_row_index')
+# mean_row = df_1.loc[min_row_index,'MSE']
+# print(mean_row,'mean_row')
+
+index_with_min_mse = df_1['MSE'].idxmin()
+index_with_max_mse = df_1['MSE'].idxmax()
+
+mean_mse = df_1['MSE'].mean()
+print(mean_mse)
+
+
+value = df_1.loc[1, 'MSE']
+# value = round(value, 6)
+print(value,'value')
+count = df_1['MSE'].value_counts().get(value, 0)
+print(count,'count')
+# column_index_with_value = df_1.columns[df_1.loc[2] == value].tolist()
+# print(column_index_with_value,'column_index_with_value')
+
+
+
+# Вычисление среднеквадратичной ошибки (MSE) между фактическими и предсказанными значениями
+# mse = mean_squared_error(data_1, data_2)
+
+#
+# print("Mean Squared Error (MSE):", mse)
