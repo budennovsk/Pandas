@@ -94,41 +94,24 @@ print(f'MAE: {mae}')
 
 
 
+import matplotlib.pyplot as plt
+
+# Your code here
+
 
 
 print('______')
-pareto_weights = (np.arange(10, 0, -1) ** -1.5)
-print(pareto_weights, 'было')
-for i in range(len(pareto_weights)):
-    pareto_weights[i] += 0.2
-print(pareto_weights, 'стало')
 
-import numpy as np
-import matplotlib.pyplot as plt
+start = [1, 3, 5, 7]
+stop = [2, 4, 6, 8]
+interval_colors = ['red', 'green', 'blue', 'yellow']
 
-pareto_weights = (np.arange(10, 0, -1) ** -1.5)
 
-plt.plot(pareto_weights, 'b-o')
-plt.xlabel('Индекс SKU')
-plt.ylabel('Вес')
-plt.title('График весов для SKU')
-plt.grid(True)
-plt.show()
+for s, e, color in zip(start, stop, interval_colors):
 
-import numpy as np
-import matplotlib.pyplot as plt
+    plt.axvspan(s, e, facecolor=color, alpha=0.3, label='Праздничные дни')
+plt.legend()
 
-pareto_weights = (np.arange(20, 0, -2) ** -1.5)
-
-for i in range(len(pareto_weights)):
-    pareto_weights[i] += 0.2
-
-plt.plot(pareto_weights, 'b-o')
-plt.xlabel('Индекс SKU_2')
-plt.ylabel('Вес_@')
-plt.title('График весов для SKU_2')
-
-plt.grid(True)
 plt.show()
 
 
