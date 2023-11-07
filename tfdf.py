@@ -70,19 +70,53 @@
 # m_loss = m(y, predictions)
 # print("Error:", m_loss)
 
-import pandas as pd
+# import pandas as pd
+#
+# # Create a DataFrame with a column named 'Date'
+# data = {'Date': ['2016-01-04 00:00:00+01:00', '2016-01-05 00:00:00+01:00']}
+# df = pd.DataFrame(data)
+# print(df)
+#
+# # Convert the 'Date' column to datetime format
+# df['Date'] = pd.to_datetime(df['Date'])
+# print(df)
+#
+# # Extract the date part from the datetime column
+# df['Date'] = df['Date'].dt.date
+#
+# # Print the DataFrame
+# print(df)
+# import numpy as np
+# from sklearn.metrics import r2_score
+#
+# # True values of the dependent variable
+# y_true = np.array([10, 15, 12, 18, 16])
+#
+# # Predicted values from the regression model
+# y_pred = np.array([12, 17, 14, 20, 18])
+#
+# # Calculate the R2 score
+# r2 = r2_score(y_true, y_pred)
+#
+# print("R2 score:", r2)
+import numpy as np
+import matplotlib.pyplot as plt
 
-# Create a DataFrame with a column named 'Date'
-data = {'Date': ['2016-01-04 00:00:00+01:00', '2016-01-05 00:00:00+01:00']}
-df = pd.DataFrame(data)
-print(df)
+# Прогнозируемые значения
+predictions = np.array([10, 15, 12, 18, 16])
 
-# Convert the 'Date' column to datetime format
-df['Date'] = pd.to_datetime(df['Date'])
-print(df)
+# Реальные значения
+actual_values = np.array([10, 14, 14, 20, 18])
 
-# Extract the date part from the datetime column
-df['Date'] = df['Date'].dt.date
 
-# Print the DataFrame
-print(df)
+# Вычисление корреляции Росса
+corr_ross = np.corrcoef(predictions, actual_values)
+
+# Построение графика корреляции Росса
+plt.figure(figsize=(10, 6))
+plt.plot(predictions, actual_values, 'o')
+plt.plot([np.min(predictions), np.max(predictions)], [np.min(actual_values), np.max(actual_values)], '--k')
+plt.xlabel('Прогнозируемое значение')
+plt.ylabel('Реальное значение')
+plt.title('График корреляции Росса')
+plt.show()
