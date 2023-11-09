@@ -33,7 +33,7 @@
 # for stock in tech_list:
 #     globals()[stock] = yf.download(stock, start, end)
 #
-
+import numpy as np
 
 #
 # import tensorflow as tf
@@ -99,24 +99,80 @@
 # r2 = r2_score(y_true, y_pred)
 #
 # print("R2 score:", r2)
-import numpy as np
-import matplotlib.pyplot as plt
+# import numpy as np
+# import matplotlib.pyplot as plt
+#
+# # Прогнозируемые значения
+# predictions = np.array([10, 15, 12, 18, 16])
+#
+# # Реальные значения
+# actual_values = np.array([10, 14, 14, 20, 18])
+#
+#
+# # Вычисление корреляции Росса
+# corr_ross = np.corrcoef(predictions, actual_values)
+#
+# # Построение графика корреляции Росса
+# plt.figure(figsize=(10, 6))
+# plt.plot(predictions, actual_values, 'o')
+# plt.plot([np.min(predictions), np.max(predictions)], [np.min(actual_values), np.max(actual_values)], '--k')
+# plt.xlabel('Прогнозируемое значение')
+# plt.ylabel('Реальное значение')
+# plt.title('График корреляции Росса')
+# plt.show()
+#
+# import numpy as np
+# import matplotlib.pyplot as plt
+#
+# # Генерируем массив x от -10 до 10, включая 1000 значений
+# # y = np.random.normal(np.random.randint(20, 50), 1, 100)
+# # print(y)
+# # Генерируем массив x от -10 до 10, включая 1000 значений
+# yy = np.random.randint(0, 100, 100)
+#
+# y = np.random.normal(yy, 50)
+#
+#
+#
+# # Вычисляем y как квадрат x
+# x = [i for i in range(len(y))]
+#
+#
+# # Строим график
+# plt.figure(figsize=(6, 4)) # Устанавливаем размер графика
+# plt.plot(x, y) # Рисуем график
+#
+# # Включаем сетку
+# plt.grid(True)
+#
+# # Устанавливаем название графика и осей
+# plt.title("График функции y = x^2")
+# plt.xlabel("x")
+# plt.ylabel("y")
+#
+# # Отображаем график
+# plt.show()
 
-# Прогнозируемые значения
-predictions = np.array([10, 15, 12, 18, 16])
+# import numpy as np
+# import matplotlib.pyplot as plt
+#
+# y = np.random.normal(100, 1, 100)
+#
+# plt.hist(y, bins=10)  # Указываем количество бинов (столбцов) для гистограммы
+# plt.xlabel('Значение')
+# plt.ylabel('Частота')
+# plt.title('Гистограмма нормального распределения')
+# plt.show()
 
-# Реальные значения
-actual_values = np.array([10, 14, 14, 20, 18])
+# for weight_promo in [np.random.randint(1, 10, 5)]*3:
+#     print(weight_promo)
 
+values = np.random.randint(1, 10, 5)
+weight_promo_list = []
+for _ in range(1):
+    weight_promo_list.extend(values)
+print(weight_promo_list)
 
-# Вычисление корреляции Росса
-corr_ross = np.corrcoef(predictions, actual_values)
-
-# Построение графика корреляции Росса
-plt.figure(figsize=(10, 6))
-plt.plot(predictions, actual_values, 'o')
-plt.plot([np.min(predictions), np.max(predictions)], [np.min(actual_values), np.max(actual_values)], '--k')
-plt.xlabel('Прогнозируемое значение')
-plt.ylabel('Реальное значение')
-plt.title('График корреляции Росса')
-plt.show()
+# values = np.random.randint(1, 10, 5)
+# weight_promo_list = values[:5] * 3
+# print(weight_promo_list)
