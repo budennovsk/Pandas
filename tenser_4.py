@@ -81,16 +81,32 @@ import matplotlib.pyplot as plt
 # # Получаем выход модели
 # outputs = model.predict(inputs)
 
-import pandas as pd
-import matplotlib.pyplot as plt
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.callbacks import CSVLogger
+import numpy as np
+from keras.optimizers import Adam
+from keras.callbacks import ReduceLROnPlateau
+from keras.optimizers import SGD, RMSprop
 
-# Создаем DataFrame с числовыми данными
-df_num = pd.DataFrame({'A': [1,1,2,2,3],
-                       'B': [10, 20, 30, 40, 50],
-                       'C': [100, 200, 300, 400, 500]})
+# создаем простую модель
+model = Sequential()
+model.add(Dense(10, activation='relu', input_shape=(8,)))
+model.add(Dense(1, activation='sigmoid'))
 
-# Отображаем гистограммы для всех числовых столбцов
-df_num.hist(figsize=(16, 20), bins=50, xlabelsize=8, ylabelsize=8)
+# компиляция модели
+model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 
-# Показываем все графики
-plt.show()
+
+# создаем колбек BaseLogger
+base_logger_callback = CSVLogger('training.log')
+
+# сгенерируем некоторые случайные данные для обучения
+X_train = np.random.random((1000, 8))
+y_train = np.random.randint(2, size=(1000, 1))
+
+# обучаем модель с использованием колбека BaseLogger
+history = model.fit(X_train, y_train, epochs=10, callbacks=[base_logger_callback])
+
+# выводим историю обучения
+print(history.history)
