@@ -89,24 +89,34 @@ from keras.optimizers import Adam
 from keras.callbacks import ReduceLROnPlateau
 from keras.optimizers import SGD, RMSprop
 
-# создаем простую модель
-model = Sequential()
-model.add(Dense(10, activation='relu', input_shape=(8,)))
-model.add(Dense(1, activation='sigmoid'))
+# # создаем простую модель
+# model = Sequential()
+# model.add(Dense(10, activation='relu', input_shape=(8,)))
+# model.add(Dense(1, activation='sigmoid'))
+#
+# # компиляция модели
+# model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
+#
+#
+# # создаем колбек BaseLogger
+# base_logger_callback = CSVLogger('training.log')
+#
+# # сгенерируем некоторые случайные данные для обучения
+# X_train = np.random.random((1000, 8))
+# y_train = np.random.randint(2, size=(1000, 1))
+#
+# # обучаем модель с использованием колбека BaseLogger
+# history = model.fit(X_train, y_train, epochs=10, callbacks=[base_logger_callback])
+#
 
-# компиляция модели
-model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
-
-
-# создаем колбек BaseLogger
-base_logger_callback = CSVLogger('training.log')
-
-# сгенерируем некоторые случайные данные для обучения
-X_train = np.random.random((1000, 8))
-y_train = np.random.randint(2, size=(1000, 1))
-
-# обучаем модель с использованием колбека BaseLogger
-history = model.fit(X_train, y_train, epochs=10, callbacks=[base_logger_callback])
-
-# выводим историю обучения
-print(history.history)
+# # выводим историю обучения
+# print(history.history)
+# import keras
+#
+# metric = keras.metrics.SparseCategoricalAccuracy()
+# targets = [0, 1, 2]
+# predictions = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+# metric.update_state(targets, predictions)
+# current_result = metric.result()
+# print(f"result: {current_result:.2f}")
+from keras.utils import image_dataset_from_directory
