@@ -119,4 +119,8 @@ from keras.optimizers import SGD, RMSprop
 # metric.update_state(targets, predictions)
 # current_result = metric.result()
 # print(f"result: {current_result:.2f}")
-from keras.utils import image_dataset_from_directory
+# from keras.utils import image_dataset_from_directory
+import numpy as np
+
+random_numbers = np.random.rand(5)
+print(random_numbers)
