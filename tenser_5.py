@@ -185,16 +185,59 @@ from keras.preprocessing.sequence import TimeseriesGenerator
 #
 # print(next_step)
 
+# import numpy as np
+#
+# # Предположим, что array - это ваш исходный массив размером (265, 10)
+# array = np.random.rand(265, 10)
+#
+# # Создаем массив нулей размером (100, 10)
+# zeros = np.zeros((100, 10))
+#
+# # Добавляем массив нулей к исходному массиву
+# result = np.vstack((zeros, array))
+#
+# print(result.shape)  # Выводит: (365, 10)
+# print(result)
+
 import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 
-# Предположим, что array - это ваш исходный массив размером (265, 10)
-array = np.random.rand(265, 10)
 
-# Создаем массив нулей размером (100, 10)
-zeros = np.zeros((100, 10))
+scaler = MinMaxScaler()
+scaler_std = StandardScaler()
 
-# Добавляем массив нулей к исходному массиву
-result = np.vstack((zeros, array))
 
-print(result.shape)  # Выводит: (365, 10)
-print(result)
+# Предположим, что array - это ваш исходный массив размером (1400, 10)
+array = np.random.rand(1400, 10)
+
+arr = array.copy()
+arr1 = array.copy()
+arr2 = array.copy()
+
+# Находим минимальное и максимальное значение в массиве
+min_val = np.min(array)
+max_val = np.max(array)
+
+# Выполняем нормализацию
+normalized_array = (array - min_val) / (max_val - min_val)
+
+print(normalized_array)
+print('__________')
+normalized_array_1 = scaler.fit_transform(arr)
+
+
+print(normalized_array_1)
+print("____________")
+mean, std = arr1.mean(axis=0), arr1.std(axis=0)
+
+train_array = (arr1 - mean) / std
+print(train_array)
+
+scaled_array_s= scaler_std.fit_transform(arr1)
+print(scaled_array_s)
+print('_______')
+
+scaled_array_ss= scaler_std.transform(arr2)
+print(scaled_array_ss)
+
