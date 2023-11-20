@@ -199,45 +199,76 @@ from keras.preprocessing.sequence import TimeseriesGenerator
 # print(result.shape)  # Выводит: (365, 10)
 # print(result)
 
-import numpy as np
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import StandardScaler
+# import numpy as np
+# from sklearn.preprocessing import MinMaxScaler
+# from sklearn.preprocessing import StandardScaler
+#
+#
+# scaler = MinMaxScaler()
+# scaler_std = StandardScaler()
+#
+#
+# # Предположим, что array - это ваш исходный массив размером (1400, 10)
+# array = np.random.rand(1400, 10)
+#
+# arr = array.copy()
+# arr1 = array.copy()
+# arr2 = array.copy()
+#
+# # Находим минимальное и максимальное значение в массиве
+# min_val = np.min(array)
+# max_val = np.max(array)
+#
+# # Выполняем нормализацию
+# normalized_array = (array - min_val) / (max_val - min_val)
+#
+# print(normalized_array)
+# print('__________')
+# normalized_array_1 = scaler.fit_transform(arr)
+#
+#
+# print(normalized_array_1)
+# print("____________")
+# mean, std = arr1.mean(axis=0), arr1.std(axis=0)
+#
+# train_array = (arr1 - mean) / std
+# print(train_array)
+#
+# scaled_array_s= scaler_std.fit_transform(arr1)
+# print(scaled_array_s)
+# print('_______')
+#
+# scaled_array_ss= scaler_std.transform(arr2)
+# print(scaled_array_ss)
 
+import dgl
+import itertools
 
-scaler = MinMaxScaler()
-scaler_std = StandardScaler()
+# Создаем список всех SKU. В этом примере у нас есть 10 SKU, поэтому мы используем range(10).
+nodes = list(range(10))
 
+# Создаем все возможные пары SKU, потому что каждый SKU влияет на все остальные.
+edges = list(itertools.product(nodes, repeat=2))
+print(edges)
 
-# Предположим, что array - это ваш исходный массив размером (1400, 10)
-array = np.random.rand(1400, 10)
+# Разделяем список пар на два списка: исходные узлы и конечные узлы.
+src, dst = zip(*edges)
+print(src)
+print(dst)
 
-arr = array.copy()
-arr1 = array.copy()
-arr2 = array.copy()
+# Создаем граф.
+g = dgl.graph((src, dst))
+print(g)
+import matplotlib.pyplot as plt
+import networkx as nx
 
-# Находим минимальное и максимальное значение в массиве
-min_val = np.min(array)
-max_val = np.max(array)
+# Преобразование в формат networkx
+nx_g = g.to_networkx()
 
-# Выполняем нормализацию
-normalized_array = (array - min_val) / (max_val - min_val)
+# Визуализация графа
+plt.figure(figsize=(8, 8))
+nx.draw(nx_g, with_labels=True)
+plt.show()
 
-print(normalized_array)
-print('__________')
-normalized_array_1 = scaler.fit_transform(arr)
-
-
-print(normalized_array_1)
-print("____________")
-mean, std = arr1.mean(axis=0), arr1.std(axis=0)
-
-train_array = (arr1 - mean) / std
-print(train_array)
-
-scaled_array_s= scaler_std.fit_transform(arr1)
-print(scaled_array_s)
-print('_______')
-
-scaled_array_ss= scaler_std.transform(arr2)
-print(scaled_array_ss)
-
+'Deep Graph Library'
+'Машинное обучение на графах с помощью DGL и PyG'
