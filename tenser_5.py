@@ -240,35 +240,102 @@ from keras.preprocessing.sequence import TimeseriesGenerator
 #
 # scaled_array_ss= scaler_std.transform(arr2)
 # print(scaled_array_ss)
+#
+# import dgl
+# import itertools
+#
+# # Создаем список всех SKU. В этом примере у нас есть 10 SKU, поэтому мы используем range(10).
+# nodes = list(range(10))
+#
+# # Создаем все возможные пары SKU, потому что каждый SKU влияет на все остальные.
+# edges = list(itertools.product(nodes, repeat=2))
+# print(edges)
+#
+# # Разделяем список пар на два списка: исходные узлы и конечные узлы.
+# src, dst = zip(*edges)
+# print(src)
+# print(dst)
+#
+# # Создаем граф.
+# g = dgl.graph((src, dst))
+# print(g)
+# import matplotlib.pyplot as plt
+# import networkx as nx
+#
+# # Преобразование в формат networkx
+# nx_g = g.to_networkx()
+#
+# # Визуализация графа
+# plt.figure(figsize=(8, 8))
+# nx.draw(nx_g, with_labels=True)
+# plt.show()
+#
+# 'Deep Graph Library'
+# 'Машинное обучение на графах с помощью DGL и PyG'
+# import matplotlib.pyplot as plt
+# from sklearn.preprocessing import StandardScaler
+#
+#
+# def manual_standard_scaler(data):
+#     mean = np.mean(data, axis=0)
+#     std = np.std(data, axis=0)
+#     normalized_data = (data - mean) / std
+#     return normalized_data, mean, std
+#
+# def manual_inverse_standard_scaler(normalized_data, mean, std):
+#     data = normalized_data * std + mean
+#     return data
+#
+# sample = np.abs(np.random.normal(loc=0, scale=1, size=(365, 10)))
+#
+# scaler = StandardScaler()
+# X_train_normalize_np = scaler.fit_transform(sample)
+# X_train_result = scaler.inverse_transform(X_train_normalize_np)
+#
+# X_train_norm_def, mean, std = manual_standard_scaler(sample)
+# X_train_result_def = manual_inverse_standard_scaler(X_train_norm_def, mean, std)
+#
+# print('original',sample)
+# print('inverse',X_train_result)
+# print('mean_res',X_train_result.mean() - sample.mean())
+#
+# print('____________')
+#
+# print('original_new',sample)
+# print('inverse_new',X_train_result_def)
+# print('mean_res_new',X_train_result_def.mean() - sample.mean())
+#
 
-import dgl
-import itertools
 
-# Создаем список всех SKU. В этом примере у нас есть 10 SKU, поэтому мы используем range(10).
-nodes = list(range(10))
 
-# Создаем все возможные пары SKU, потому что каждый SKU влияет на все остальные.
-edges = list(itertools.product(nodes, repeat=2))
-print(edges)
+# for i in range(10):
+#
+#     x = np.arange(0, 365)
+#
+#
+#     plt.plot(x, sample[:,i])
+#
+#     plt.xlabel('x')
+#     plt.ylabel('sample')
+#     plt.title('Curve Plot')
+#     plt.show()
 
-# Разделяем список пар на два списка: исходные узлы и конечные узлы.
-src, dst = zip(*edges)
-print(src)
-print(dst)
+from sklearn.model_selection import train_test_split
 
-# Создаем граф.
-g = dgl.graph((src, dst))
-print(g)
-import matplotlib.pyplot as plt
-import networkx as nx
+import numpy as np
 
-# Преобразование в формат networkx
-nx_g = g.to_networkx()
+# Генерируем данные по нормальному закону
+data = np.random.normal(size=(1, 365))
 
-# Визуализация графа
-plt.figure(figsize=(8, 8))
-nx.draw(nx_g, with_labels=True)
-plt.show()
+# Возьмем модуль от данных, чтобы они были положительными
+data = np.abs(data)
 
-'Deep Graph Library'
-'Машинное обучение на графах с помощью DGL и PyG'
+
+print(data.max())
+print(data.min())
+
+# Масштабируем данные, чтобы они были в диапазоне от 0 до 40
+data1 = 40 * data / np.max(data)
+print(data1.max())
+print(data1.min())
+print(data1)
