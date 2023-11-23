@@ -322,20 +322,36 @@ from keras.preprocessing.sequence import TimeseriesGenerator
 
 from sklearn.model_selection import train_test_split
 
-import numpy as np
+# import numpy as np
+#
+# # Генерируем данные по нормальному закону
+# data = np.random.normal(size=(1, 365))
+#
+# # Возьмем модуль от данных, чтобы они были положительными
+# data = np.abs(data)
+#
+#
+# print(data.max())
+# print(data.min())
+#
+# # Масштабируем данные, чтобы они были в диапазоне от 0 до 40
+# data1 = 40 * data / np.max(data)
+# print(data1.max())
+# print(data1.min())
+# print(data1)
 
-# Генерируем данные по нормальному закону
-data = np.random.normal(size=(1, 365))
+from keras.models import Sequential
+from keras.layers import Dense
 
-# Возьмем модуль от данных, чтобы они были положительными
-data = np.abs(data)
+# Создаем модель
+model1 = Sequential([Dense(10, activation='relu', input_shape=(8,))])
 
 
-print(data.max())
-print(data.min())
+# Создаем другую модель
+model2 = Sequential([Dense(10, activation='relu', input_shape=(8,))])
 
-# Масштабируем данные, чтобы они были в диапазоне от 0 до 40
-data1 = 40 * data / np.max(data)
-print(data1.max())
-print(data1.min())
-print(data1)
+
+print(model1.name)
+print(model2.name)
+print(model2)
+print(model1)
