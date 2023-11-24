@@ -340,18 +340,19 @@ from sklearn.model_selection import train_test_split
 # print(data1.min())
 # print(data1)
 
-from keras.models import Sequential
-from keras.layers import Dense
-
-# Создаем модель
-model1 = Sequential([Dense(10, activation='relu', input_shape=(8,))])
-
-
-# Создаем другую модель
-model2 = Sequential([Dense(10, activation='relu', input_shape=(8,))])
-
-
-print(model1.name)
-print(model2.name)
-print(model2)
-print(model1)
+# from keras.models import Sequential
+# from keras.layers import Dense
+#
+# # Создаем модель
+# model1 = Sequential([Dense(10, activation='relu', input_shape=(8,))])
+#
+#
+# # Создаем другую модель
+# model2 = Sequential([Dense(10, activation='relu', input_shape=(8,))])
+#
+#
+# print(model1.name)
+# print(model2.name)
+# print(model2)
+# print(model1)
+print(2500//8)
