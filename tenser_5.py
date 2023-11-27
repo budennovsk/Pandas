@@ -355,4 +355,19 @@ from sklearn.model_selection import train_test_split
 # print(model2.name)
 # print(model2)
 # print(model1)
-print(2500//8)
+import numpy as np
+
+# предположим, что arr - это ваш исходный массив размером (2,7,3)
+arr = np.random.rand(2,7,3)
+print(arr)
+
+# выбираем 0 столбец из каждого трехмерного массива
+result = arr[:,:,0]
+
+print(result.shape)
+print(result.flatten())
+
+vv =[0] * 3
+print(vv)
+c = [1,2,3]+ vv
+print(c)
