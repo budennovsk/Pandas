@@ -193,3 +193,30 @@ for i in range(3):
 #                               'min_type': 'min',
 #                               'max_type': 'max'})
 # writer.close()
+from catboost import CatBoostRegressor
+import matplotlib.pyplot as plt
+
+# Создание и обучение модели
+model = CatBoostRegressor(iterations=500,
+                          depth=10,
+                          learning_rate=0.01,
+                          loss_function='RMSE',
+                          eval_metric='RMSE',
+                          early_stopping_rounds=20)
+
+model.fit(X_train, y_train,
+          eval_set=(X_test, y_test),
+          verbose=False)
+
+# Получение результатов обучения
+evals_result = model.get_evals_result()
+
+# Визуализация результатов
+plt.plot(evals_result['learn']['RMSE'], label='Train')
+plt.plot(evals_result['validation']['RMSE'], label='Test')
+plt.title('Model error dynamics')
+plt.xlabel('Iteration')
+plt.ylabel('RMSE')
+plt.legend()
+plt.grid(True)
+plt.show()
