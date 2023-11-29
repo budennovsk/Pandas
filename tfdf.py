@@ -167,12 +167,73 @@ import numpy as np
 # for weight_promo in [np.random.randint(1, 10, 5)]*3:
 #     print(weight_promo)
 
-values = np.random.randint(1, 10, 5)
-weight_promo_list = []
-for _ in range(1):
-    weight_promo_list.extend(values)
-print(weight_promo_list)
+# values = np.random.randint(1, 10, 5)
+# weight_promo_list = []
+# for _ in range(1):
+#     weight_promo_list.extend(values)
+# print(weight_promo_list)
 
 # values = np.random.randint(1, 10, 5)
 # weight_promo_list = values[:5] * 3
 # print(weight_promo_list)
+
+# from sklearn.model_selection import TimeSeriesSplit
+# import numpy as np
+#
+# # Временной ряд
+# X = np.array([[1], [2], [3], [4], [5], [6], [7], [8], [9], [10]])
+# y = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+#
+# tscv = TimeSeriesSplit(n_splits=3)
+#
+# for train_index, val_index in tscv.split(X):
+#     X_train, X_val = X[train_index], X[val_index]
+#     y_train, y_val = y[train_index], y[val_index]
+#
+#     print("TRAIN:", train_index, "TEST:", val_index)
+#     print("TRAIN:", X_train, "TEST:", X_val)
+
+# import pandas as pd
+#
+# data = {
+#     'values': [1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5]
+# }
+# df = pd.DataFrame(data)
+# import matplotlib.pyplot as plt
+#
+# df['values'].hist(bins=5, figsize=(10,5))
+#
+# plt.title('Распределение значений')
+# plt.xlabel('Значение')
+# plt.ylabel('Частота')
+# plt.show()
+# import numpy as np
+#
+# random_float = np.random.uniform(1.0, 3.0)
+#
+# print(random_float)
+
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Flatten
+from keras.src.applications.densenet import layers
+from keras.utils import plot_model
+import keras
+
+
+# создаем простую модель
+vocabulary_size = 10000
+num_tags = 100
+num_departments = 4
+title = keras.Input(shape=(vocabulary_size,), name="title")
+text_body = keras.Input(shape=(vocabulary_size,), name="text_body")
+tags = keras.Input(shape=(num_tags,), name="tags")
+features = layers.Concatenate()([title, text_body, tags])
+features = layers.Dense(64, activation="relu")(features)
+priority = layers.Dense(1, activation="sigmoid", name="priority")(features)
+department = layers.Dense(
+ num_departments, activation="softmax", name="department")(features)
+model = keras.Model(inputs=[title, text_body, tags],outputs=[priority, department])
+
+# визуализируем модель
+plot_model(model, to_file='model.png', show_shapes=True)
+keras.callbacks.ModelCheckpoint
