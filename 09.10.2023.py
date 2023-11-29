@@ -220,3 +220,20 @@ plt.ylabel('RMSE')
 plt.legend()
 plt.grid(True)
 plt.show()
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.callbacks import EarlyStopping
+
+# Создаем модель
+model = Sequential()
+model.add(Dense(10, input_dim=8, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
+
+# Компилируем модель
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# Создаем экземпляр EarlyStopping
+es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=50)
+
+# Обучаем модель
+history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=5000, verbose=0, callbacks=[es])
