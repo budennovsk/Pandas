@@ -106,31 +106,84 @@ import pandas as pd
 #     zero_indices_1 = dfs[0][dfs[0]['count'] == 0].index
 # print('_______________________')
 
-import pandas as pd
+# import pandas as pd
+# import numpy as np
+#
+# # Исходный DataFrame
+# df = pd.DataFrame({'count': [19,19,19,3,2,1,19,19,19,19,1,19,1,3,2,19,19,19,19,19,19,19,19,3,19,19,1,1,19,1]})
+#
+# # Разделите DataFrame на 3 части
+# dfs = np.array_split(df, 3)
+#
+# # Создаем список для хранения результатов
+# result = []
+#
+# # Цикл по каждому индексу
+# for i in range(10):  # мы знаем, что каждый блок имеет 10 строк
+#     # Получаем текущее значение из каждого блока
+#     values = [dfs[j].iloc[i]['count'] for j in range(3)]
+#     # Если значения не одинаковы, выбираем минимальное значение
+#     if len(set(values)) > 1:
+#         result.append(min(values))
+#     else:
+#         # Если значения одинаковы, сохраняем значение
+#         result.append(values[0])
+#
+# # Уменьшаем размер DataFrame до 10 строк и добавляем результат
+# df = df.iloc[:10]
+# df['res'] = result
+#
+# print(df)
+# import numpy as np
+# from catboost import CatBoostRegressor
+#
+# # Предположим, что у нас есть временной ряд
+# time_series = np.random.normal(size=(1000,))
+# time_series = time_series[:-7].copy()
+# y_true = time_series[-7:]
+#
+#
+# # Мы будем использовать 30 последних значений для прогнозирования каждого из следующих 7 значений
+# X = np.array([time_series[i-30:i] for i in range(30, len(time_series)-7)])
+# Y = np.array([time_series[i:i+7] for i in range(30, len(time_series)-7)])
+#
+# # Обучаем отдельную модель CatBoost для каждого шага прогнозирования
+# models = []
+# for i in range(7):
+#     model = CatBoostRegressor(loss_function='RMSE', verbose=False)
+#     model.fit(X, Y[:, i])
+#     models.append(model)
+#
+# # Прогнозируем следующие 7 значений
+# input_data = time_series[-30:]
+# predictions = [model.predict(input_data.reshape(1, -1)) for model in models]
+# print('pred',predictions)
+# print('y_true',y_true)
+
+from sklearn.ensemble import GradientBoostingRegressor
 import numpy as np
+time_series = np.random.normal(size=(1000,))
 
-# Исходный DataFrame
-df = pd.DataFrame({'count': [19,19,19,3,2,1,19,19,19,19,1,19,1,3,2,19,19,19,19,19,19,19,19,3,19,19,1,1,19,1]})
+# Мы будем использовать 30 последних значения для прогнозирования следующих 7 значений
+X = np.array([time_series[i-30:i] for i in range(30, len(time_series)-7)])
+Y = np.array([time_series[i:i+7] for i in range(30, len(time_series)-7)])
 
-# Разделите DataFrame на 3 части
-dfs = np.array_split(df, 3)
+# Initiate the model
+model = GradientBoostingRegressor()
 
-# Создаем список для хранения результатов
-result = []
+# Fit the model
+model.fit(X, Y)
 
-# Цикл по каждому индексу
-for i in range(10):  # мы знаем, что каждый блок имеет 10 строк
-    # Получаем текущее значение из каждого блока
-    values = [dfs[j].iloc[i]['count'] for j in range(3)]
-    # Если значения не одинаковы, выбираем минимальное значение
-    if len(set(values)) > 1:
-        result.append(min(values))
-    else:
-        # Если значения одинаковы, сохраняем значение
-        result.append(values[0])
+# Make predictions
+input_data = time_series[-30:]
+predictions = model.predict(input_data.reshape(1, -1))
+print(predictions)
+# Получаем важность признаков
+importances = model.get_feature_importance()
 
-# Уменьшаем размер DataFrame до 10 строк и добавляем результат
-df = df.iloc[:10]
-df['res'] = result
+# Нормализуем важности признаков
+importances = importances / sum(importances)
 
-print(df)
+# Выводим на экран нормализованные важности признаков
+for feature_name, importance in zip(X_train.columns, importances):
+    print(f'{feature_name}: {importance:.4f}')
