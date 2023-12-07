@@ -160,30 +160,52 @@ import pandas as pd
 # print('pred',predictions)
 # print('y_true',y_true)
 
-from sklearn.ensemble import GradientBoostingRegressor
+# from sklearn.ensemble import GradientBoostingRegressor
+# import numpy as np
+# time_series = np.random.normal(size=(1000,))
+#
+# # Мы будем использовать 30 последних значения для прогнозирования следующих 7 значений
+# X = np.array([time_series[i-30:i] for i in range(30, len(time_series)-7)])
+# Y = np.array([time_series[i:i+7] for i in range(30, len(time_series)-7)])
+#
+# # Initiate the model
+# model = GradientBoostingRegressor()
+#
+# # Fit the model
+# model.fit(X, Y)
+#
+# # Make predictions
+# input_data = time_series[-30:]
+# predictions = model.predict(input_data.reshape(1, -1))
+# print(predictions)
+# # Получаем важность признаков
+# importances = model.get_feature_importance()
+#
+# # Нормализуем важности признаков
+# importances = importances / sum(importances)
+#
+# # Выводим на экран нормализованные важности признаков
+# for feature_name, importance in zip(X_train.columns, importances):
+#     print(f'{feature_name}: {importance:.4f}')
+
+import pandas as pd
 import numpy as np
-time_series = np.random.normal(size=(1000,))
 
-# Мы будем использовать 30 последних значения для прогнозирования следующих 7 значений
-X = np.array([time_series[i-30:i] for i in range(30, len(time_series)-7)])
-Y = np.array([time_series[i:i+7] for i in range(30, len(time_series)-7)])
+# создаем DataFrame
+df = pd.DataFrame({
+    'eee': pd.Categorical(['a', 'b', 'a', 'b', 'a', 'b', 'a', 'b']),
+    'ccc': pd.Categorical(['c', 'd', 'c', 'd', 'c', 'd', 'c', 'd']),
+    'other_column': np.random.normal(size=8),
+    'target_column': np.random.choice([0, 1], size=8),
+})
 
-# Initiate the model
-model = GradientBoostingRegressor()
+print(df)
 
-# Fit the model
-model.fit(X, Y)
+cat_features = [df.columns.get_loc(name) for name in df.columns.tolist()]
+print(cat_features)
 
-# Make predictions
-input_data = time_series[-30:]
-predictions = model.predict(input_data.reshape(1, -1))
-print(predictions)
-# Получаем важность признаков
-importances = model.get_feature_importance()
+import numpy as np
 
-# Нормализуем важности признаков
-importances = importances / sum(importances)
-
-# Выводим на экран нормализованные важности признаков
-for feature_name, importance in zip(X_train.columns, importances):
-    print(f'{feature_name}: {importance:.4f}')
+x = np.array(1)
+for i in x:
+    print(i)
