@@ -296,180 +296,157 @@ df['Regular Sales'] *= df['Seasonality'] * df['Monthly Seasonality'] * df['Holid
 #         df.loc[mask, 'Promo Sales'] = promo_increase * np.random.uniform(1.0, 3.0)
 #         df.loc[mask, 'Regular Sales'] = 0
 # __________________
-# for sku, intervals in promo_intervals_per_sku.items():
+for sku, intervals in promo_intervals_per_sku.items():
 
-#     # Вычисляем основную маску один раз для каждого SKU
-#     mask_sku = df['SKU'].values == sku
-
-#     for start, end in intervals:
-#         # Обновляем только те части маски, которые соответствуют текущему интервалу
-#         mask = mask_sku & (df['Day'].values >= start) & (df['Day'].values <= end)
-
-#         df['Price'].values[mask] *= np.random.uniform(0.7, 0.8)
-#         promo_increase = np.abs(np.random.normal(200, 20, np.sum(mask)) * pareto_weights[sku-1])
-#         df['Promo Sales'].values[mask] = promo_increase * np.random.uniform(1.0, 3.0)
-#         df['Regular Sales'].values[mask] = 0
-# # _____________________________
-# print('1')
-
-
-def process(sku_intervals):
-    sku, intervals = sku_intervals
-    df_sku = df[df['SKU'] == sku].copy()
+    # Вычисляем основную маску один раз для каждого SKU
+    mask_sku = df['SKU'].values == sku
 
     for start, end in intervals:
-        mask = (df_sku['Day'].values >= start) & (df_sku['Day'].values <= end)
+        # Обновляем только те части маски, которые соответствуют текущему интервалу
+        mask = mask_sku & (df['Day'].values >= start) & (df['Day'].values <= end)
 
-        df_sku.loc[mask, 'Price'] *= np.random.uniform(0.7, 0.8)
-        promo_increase = np.abs(np.random.normal(200, 20, np.sum(mask)) * pareto_weights[sku - 1])
-        df_sku.loc[mask, 'Promo Sales'] = promo_increase * np.random.uniform(1.0, 3.0)
-        df_sku.loc[mask, 'Regular Sales'] = 0
-
-    return df_sku
-
-if __name__ == '__main__':
-    with mp.Pool(mp.cpu_count()) as pool:
-        results = pool.map(process, promo_intervals_per_sku.items())
-
-    df = pd.concat(results)
-
-    print('2')
-
-    # df.loc [mask,'weight_promo'] = weight_promo_list[wght_promo]
-    #     if intervals:
-    #         weight_promo_list[wght_promo]
-    #         wght_promo+=1
-
-    # wght_promo = 0
+        df['Price'].values[mask] *= np.random.uniform(0.7, 0.8)
+        promo_increase = np.abs(np.random.normal(200, 20, np.sum(mask)) * pareto_weights[sku-1])
+        df['Promo Sales'].values[mask] = promo_increase * np.random.uniform(1.0, 3.0)
+        df['Regular Sales'].values[mask] = 0
+# # _____________________________
 
 
-    # if wght_promo != len(weight_promo_list):
-    #     wght_promo+=1
-    # flag = False
+# df.loc [mask,'weight_promo'] = weight_promo_list[wght_promo]
+#     if intervals:
+#         weight_promo_list[wght_promo]
+#         wght_promo+=1
+
+# wght_promo = 0
 
 
-    # other_skus_mask = (df['SKU'] != sku) & (df['Day'] >= start) & (df['Day'] <= end)
-    # df.loc[other_skus_mask, 'Regular Sales'] *= np.random.uniform(0.7, 0.9)
-
-    print(df.shape)
-    df['index_promo'] = ''
-
-    # Iterate over the 'data' dictionary
-    for dos in new_dicts:
-        for sku, ranges in dos.items():
-            for start, end in ranges:
-                # Expand the range and check if any value matches the 'DAYS' column
-                matching_days = range(start, end + 1)
-                df.loc[df['Day'].isin(matching_days), 'index_promo'] = sku
-
-    for sublist in influences:
-
-        for item in sublist:
-            key, value = item.split(': ')
-            df.loc[df['index_promo'] == key, 'res_index_promo'] = float(value)
-    # замена nan на 1 чтобы умножить столбцы без изменений
-    df['res_index_promo'].fillna(value=1, inplace=True)
-    # срез максимальных индексов 286 позиция слишком улетела 4 значение
-    # df['res_index_promo'] = df['res_index_promo'].apply(lambda x: 1.7 if x > 1.7 else x)
-    # показ результатов полученных индексов
-    df['result_1'] = df['Regular Sales'] * df['res_index_promo']
-    # регулярные индексы с связью sku*sku
-
-    # print(df[df['SKU']==1][25:40]) #[5:23]
-    df['Regular Sales'] = df['Regular Sales'] * df['res_index_promo']
-    df['Regular_Sales_Promo_Sales'] = df['Regular Sales'] + df['Promo Sales']
-
-    # combined_df1_df2 = df.merge(df_combined, on='SKU')
-    df['promo_int'] = df_combined['day_promo_only_num'].values
-    df['holiday_int'] = df_combined['holiday_int'].values
-    df['day_of_year'] = np.where(df['Day'].values % 365 == 0, 365, df['Day'].values % 365)
-    df['promo_merge'] = np.where(df['promo_int'].values == 1, df['day_of_year'].values, 0)
-
-    df.to_csv('df_100.csv', index=False)
-
-    # for sku in range(1, sku_count + 1):
-    #     plt.figure(figsize=(22, 6))
-    #     subset = df[df['SKU'] == sku]
-    #     plt.plot(subset['Day'], subset['Regular Sales'], label='Regular Sales')
-    #     plt.plot(subset['Day'], subset['Promo Sales'], label='Promo Sales', color='red')
-    #     plt.title(f"Sales for SKU {sku}")
-    #     plt.legend()
+# if wght_promo != len(weight_promo_list):
+#     wght_promo+=1
+# flag = False
 
 
-    #     # Изменение шага на оси x
-    #     plt.xticks(range(0, days, 100))
-    #     # праздничные_коэффициенты
-    #     # Выделение интервалов зеленым цветом
-    #      # Выделение интервалов зеленым цветом
-    #     interval_colors = ['green'] * sku_count
-    #     bound_pr = []
-    #     bound_ol = []
-    #     for start in праздничные_коэффициенты:
-    #         bound_ol.append(start)
-    #         if start != 1:
-    #             end = start - 6
-    #             bound_pr.append((start,end))
-    #             plt.axvspan(start, end, facecolor=interval_colors[sku-1], alpha=0.3)
+# other_skus_mask = (df['SKU'] != sku) & (df['Day'] >= start) & (df['Day'] <= end)
+# df.loc[other_skus_mask, 'Regular Sales'] *= np.random.uniform(0.7, 0.9)
 
 
-    #     # interval_colors = ['yellow'] * sku_count
-    #     # for intervals in new_dicts:
-    #     #     for sku_indx, tuple_num in intervals.items():
+df['index_promo'] = ''
 
-    #     #         for start, end in tuple_num:
-    #     #             plt.axvspan(start, end, facecolor=interval_colors[sku-1], alpha=0.3)
+# Iterate over the 'data' dictionary
+for dos in new_dicts:
+    for sku, ranges in dos.items():
+        for start, end in ranges:
+            # Expand the range and check if any value matches the 'DAYS' column
+            matching_days = range(start, end + 1)
+            df.loc[df['Day'].isin(matching_days), 'index_promo'] = sku
 
-    #     interval_colors = ['yellow'] * sku_count
+for sublist in influences:
 
-    #     for sku_indx, tuple_num in new_dicts[sku-1].items():
+    for item in sublist:
+        key, value = item.split(': ')
+        df.loc[df['index_promo'] == key, 'res_index_promo'] = float(value)
+# замена nan на 1 чтобы умножить столбцы без изменений
+df['res_index_promo'].fillna(value=1, inplace=True)
+# срез максимальных индексов 286 позиция слишком улетела 4 значение
+# df['res_index_promo'] = df['res_index_promo'].apply(lambda x: 1.7 if x > 1.7 else x)
+# показ результатов полученных индексов
+df['result_1'] = df['Regular Sales'] * df['res_index_promo']
+# регулярные индексы с связью sku*sku
 
-    #         for start, end in tuple_num:
-    #             plt.axvspan(start, end, facecolor=interval_colors[sku-1], alpha=0.3)
+# print(df[df['SKU']==1][25:40]) #[5:23]
+df['Regular Sales'] = df['Regular Sales'] * df['res_index_promo']
+df['Regular_Sales_Promo_Sales'] = df['Regular Sales'] + df['Promo Sales']
 
+# combined_df1_df2 = df.merge(df_combined, on='SKU')
+df['promo_int'] = df_combined['day_promo_only_num'].values
+df['holiday_int'] = df_combined['holiday_int'].values
+df['day_of_year'] = np.where(df['Day'].values % 365 == 0, 365, df['Day'].values % 365)
+df['promo_merge'] = np.where(df['promo_int'].values == 1, df['day_of_year'].values, 0)
 
-    # plt.show()
-    # # print(bound_pr,'green')
-    # # print(bound_ol, 'ol')
-    # # c = df[df['Holiday Boost']>1]['Day'].tolist()
-    # # print(c)
-    # # print(df.loc[-10:10950])
+df.to_csv('df_100.csv', index=False)
 
-
-    # # Суммарные продажи по SKU
-    # total_sales_per_sku = df.groupby('SKU')[['Regular Sales', 'Promo Sales']].sum().sum(axis=1)
-    # plt.figure(figsize=(12, 6))
-    # total_sales_per_sku.plot(kind='bar')
-    # plt.title("Total Sales for Each SKU")
-    # plt.ylabel("Total Sales")
-    # plt.xlabel("SKU")
-    # plt.show()
-
-
-    # # Добавим столбец 'Date', чтобы использовать его для группировки по неделям
-    # df['Date'] = pd.to_datetime(df['Day'], origin='2023-01-01', unit='D')
-
-    # # Группируем по SKU и неделям, затем суммируем продажи
-    # weekly_sales = df.groupby('SKU').apply(lambda group: group.set_index('Date').resample('W').sum())
-
-    # # Отрисовка графиков недельных продаж для каждого SKU
-    # for sku in range(1, sku_count + 1):
-    #     plt.figure(figsize=(22, 6))
-
-    #     # Выбор нужного SKU из отсортированных данных
-    #     subset = weekly_sales.loc[sku]
-
-    #     # Рисуем график недельных продаж
-    #     plt.plot(subset.index, subset['Regular Sales'] + subset['Promo Sales'], label='Total Weekly Sales')
-    #     plt.title(f"Weekly Sales for SKU {sku}")
-    #     plt.ylabel("Sales")
-    #     plt.xlabel("Week")
-    #     plt.legend()
-    #     plt.grid(True)
-    #     plt.show()
+# for sku in range(1, sku_count + 1):
+#     plt.figure(figsize=(22, 6))
+#     subset = df[df['SKU'] == sku]
+#     plt.plot(subset['Day'], subset['Regular Sales'], label='Regular Sales')
+#     plt.plot(subset['Day'], subset['Promo Sales'], label='Promo Sales', color='red')
+#     plt.title(f"Sales for SKU {sku}")
+#     plt.legend()
 
 
-    end_time = time.time()
+#     # Изменение шага на оси x
+#     plt.xticks(range(0, days, 100))
+#     # праздничные_коэффициенты
+#     # Выделение интервалов зеленым цветом
+#      # Выделение интервалов зеленым цветом
+#     interval_colors = ['green'] * sku_count
+#     bound_pr = []
+#     bound_ol = []
+#     for start in праздничные_коэффициенты:
+#         bound_ol.append(start)
+#         if start != 1:
+#             end = start - 6
+#             bound_pr.append((start,end))
+#             plt.axvspan(start, end, facecolor=interval_colors[sku-1], alpha=0.3)
 
-    print("Время выполнения сек: ", end_time - start_time)
 
-    print("Время выполнения в минутах: ", ((end_time - start_time) / 60))
+#     # interval_colors = ['yellow'] * sku_count
+#     # for intervals in new_dicts:
+#     #     for sku_indx, tuple_num in intervals.items():
+
+#     #         for start, end in tuple_num:
+#     #             plt.axvspan(start, end, facecolor=interval_colors[sku-1], alpha=0.3)
+
+#     interval_colors = ['yellow'] * sku_count
+
+#     for sku_indx, tuple_num in new_dicts[sku-1].items():
+
+#         for start, end in tuple_num:
+#             plt.axvspan(start, end, facecolor=interval_colors[sku-1], alpha=0.3)
+
+
+# plt.show()
+# # print(bound_pr,'green')
+# # print(bound_ol, 'ol')
+# # c = df[df['Holiday Boost']>1]['Day'].tolist()
+# # print(c)
+# # print(df.loc[-10:10950])
+
+
+# # Суммарные продажи по SKU
+# total_sales_per_sku = df.groupby('SKU')[['Regular Sales', 'Promo Sales']].sum().sum(axis=1)
+# plt.figure(figsize=(12, 6))
+# total_sales_per_sku.plot(kind='bar')
+# plt.title("Total Sales for Each SKU")
+# plt.ylabel("Total Sales")
+# plt.xlabel("SKU")
+# plt.show()
+
+
+# # Добавим столбец 'Date', чтобы использовать его для группировки по неделям
+# df['Date'] = pd.to_datetime(df['Day'], origin='2023-01-01', unit='D')
+
+# # Группируем по SKU и неделям, затем суммируем продажи
+# weekly_sales = df.groupby('SKU').apply(lambda group: group.set_index('Date').resample('W').sum())
+
+# # Отрисовка графиков недельных продаж для каждого SKU
+# for sku in range(1, sku_count + 1):
+#     plt.figure(figsize=(22, 6))
+
+#     # Выбор нужного SKU из отсортированных данных
+#     subset = weekly_sales.loc[sku]
+
+#     # Рисуем график недельных продаж
+#     plt.plot(subset.index, subset['Regular Sales'] + subset['Promo Sales'], label='Total Weekly Sales')
+#     plt.title(f"Weekly Sales for SKU {sku}")
+#     plt.ylabel("Sales")
+#     plt.xlabel("Week")
+#     plt.legend()
+#     plt.grid(True)
+#     plt.show()
+
+
+end_time = time.time()
+
+print("Время выполнения сек: ", end_time - start_time)
+
+print("Время выполнения в минутах: ", ((end_time - start_time) / 60))
