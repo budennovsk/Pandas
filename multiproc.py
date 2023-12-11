@@ -3,7 +3,7 @@ import time
 start_time = time.time()
 
 import numpy as np
-import multiprocessing as mp
+
 import pandas as pd
 
 # Задайте максимальное количество столбцов для вывода
@@ -17,7 +17,7 @@ np.random.seed(0)
 
 N_years = 7
 days = 365 * N_years
-sku_count = 10
+sku_count = 500
 
 # 8.8
 koef = 8.8
@@ -362,7 +362,7 @@ df['holiday_int'] = df_combined['holiday_int'].values
 df['day_of_year'] = np.where(df['Day'].values % 365 == 0, 365, df['Day'].values % 365)
 df['promo_merge'] = np.where(df['promo_int'].values == 1, df['day_of_year'].values, 0)
 
-df.to_csv('df_100.csv', index=False)
+df.to_csv('df_1000.csv', index=False)
 
 # for sku in range(1, sku_count + 1):
 #     plt.figure(figsize=(22, 6))
@@ -450,3 +450,11 @@ end_time = time.time()
 print("Время выполнения сек: ", end_time - start_time)
 
 print("Время выполнения в минутах: ", ((end_time - start_time) / 60))
+
+
+# Время выполнения сек:  2.055630922317505
+# Время выполнения в минутах:  0.034260515371958414
+
+# Время выполнения сек:  105.88523411750793
+# Время выполнения в минутах:  1.7647539019584655
+# 50
