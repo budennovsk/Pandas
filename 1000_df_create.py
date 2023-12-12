@@ -432,3 +432,10 @@ print("Время выполнения сек: ", end_time - start_time)
 print("Время выполнения в минутах: ", ((end_time - start_time) / 60))
 
 
+# setInterval(ClickConnect,1800000)
+
+# function ClickConnect() {
+#     console.log("Clicked on connect button");
+#     document.querySelector("colab-connect-button").click()
+# }
+# setInterval(ClickConnect,60000)
