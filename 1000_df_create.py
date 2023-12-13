@@ -423,14 +423,14 @@ df = process_sales_data(df, df_combined)
 #     plt.grid(True)
 #     plt.show()
 
-
-end_time = time.time()
-print()
-
-print("Время выполнения сек: ", end_time - start_time)
-
-print("Время выполнения в минутах: ", ((end_time - start_time) / 60))
-
+#
+# end_time = time.time()
+# print()
+#
+# print("Время выполнения сек: ", end_time - start_time)
+#
+# print("Время выполнения в минутах: ", ((end_time - start_time) / 60))
+#
 
 # setInterval(ClickConnect,1800000)
 
@@ -439,3 +439,46 @@ print("Время выполнения в минутах: ", ((end_time - start_
 #     document.querySelector("colab-connect-button").click()
 # }
 # setInterval(ClickConnect,60000)
+
+# предположим, это ваш исходный список
+# promo_int_485 = ['promo_int_485', 'promo_int_486', 'promo_int_480']
+#
+#
+# # оставляем только числа в каждом элементе списка
+# promo_int_485 = [s.split('_')[-1] for s in promo_int_485]
+#
+# print(promo_int_485)  # вывод: ['1', '2', '3']
+# import numpy as np
+# import matplotlib.pyplot as plt
+#
+# # Ваши данные
+# x = np.array([100, 500])
+# y = np.array([2, 17])
+#
+# # Построим полиномиальную регрессию второго порядка
+# coefficients = np.polyfit(x, y, 2)
+# polynomial = np.poly1d(coefficients)
+#
+# # Построим график
+# xp = np.linspace(0, 1000, 100)
+# plt.plot(x, y, 'o', xp, polynomial(xp), '-')
+# plt.title('Прогноз обучения GPU')
+#
+# plt.xlabel('Размер признаков')
+# plt.ylabel('Время обучения в минутах')
+# plt.show()
+#
+# # Предсказываем значение y для x = 10000
+# predicted_y = polynomial(1000)
+# print(predicted_y)
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+sku_count = 100 # пример значения
+pareto_weights = (np.arange(sku_count * 8, 0, -8) ** -1.5)
+pareto_weights /= pareto_weights.sum()
+
+plt.plot(pareto_weights)
+plt.title("Pareto Weights")
+plt.show()
