@@ -112,38 +112,58 @@
 #     print(i+['1111'])
 
 
+# import pandas as pd
+# import numpy as np
+#
+# # Assuming df is your DataFrame
+# df = pd.DataFrame({
+#
+#     'Product': ['Сыр полутвёрдый Bonfesto Моцарелла Pizza Пленка 250 г 40,0%', 'Сыр полутвёрдый Cheerussi Дой-пак 100 г 45,0%'],
+#     'Value1': [74888.44, 298.69],
+#     'Count1': [13320.12, 148.37],
+#     'Value2': [74888.44, 298.69],
+#     'Count2': [13320.12, 148.37],
+#     'Value3': [74888.44, 298.69],
+#     'Count3': [13320.12, 148.37]
+# })
+# r1= df.T
+# # Ваш новый столбец
+# month = [0,1,1,2,2,3,3]
+#
+# # Вставка столбца 'month' на первое место
+# r1.insert(0, 'month', month)
+#
+# print(r1)
+#
+# print(r1.to_string())
+#
+# # Исходный список
+# lst = [10, 9, 8]
+#
+# # Повторяем каждый элемент из исходного списка 2 раза
+# repeated_lst = [item for item in lst for _ in range(2)]
+#
+# # Добавляем 4 нуля в начало списка
+# result = [0]*4 + repeated_lst
+#
+# print(result)
+
 import pandas as pd
+
+df = pd.DataFrame({
+    'month': [1, 1, 2, 2, 3, 3, ...],
+    'sku': ['sku1', 'sku2', 'sku1', 'sku2', 'sku1', 'sku2', ...],
+    'promo': [100, 200, 150, 250, 120, 210, ...],
+    'regular': [1000, 2000, 1500, 2500, 1200, 2100, ...],
+})
+print(df.shape)
 import numpy as np
 
-# Assuming df is your DataFrame
-df = pd.DataFrame({
 
-    'Product': ['Сыр полутвёрдый Bonfesto Моцарелла Pizza Пленка 250 г 40,0%', 'Сыр полутвёрдый Cheerussi Дой-пак 100 г 45,0%'],
-    'Value1': [74888.44, 298.69],
-    'Count1': [13320.12, 148.37],
-    'Value2': [74888.44, 298.69],
-    'Count2': [13320.12, 148.37],
-    'Value3': [74888.44, 298.69],
-    'Count3': [13320.12, 148.37]
-})
-r1= df.T
-# Ваш новый столбец
-month = [0,1,1,2,2,3,3]
 
-# Вставка столбца 'month' на первое место
-r1.insert(0, 'month', month)
+# Определяем количество повторений
+repeats = int(np.ceil(len(df) / 2))  # np.ceil округляет вверх, чтобы обеспечить достаточное количество значений
 
-print(r1)
-
-print(r1.to_string())
-
-# Исходный список
-lst = [10, 9, 8]
-
-# Повторяем каждый элемент из исходного списка 2 раза
-repeated_lst = [item for item in lst for _ in range(2)]
-
-# Добавляем 4 нуля в начало списка
-result = [0]*4 + repeated_lst
-
-print(result)
+# Создаем новую колонку 'new_column', которая повторяет последовательность [1, 0]
+df['new_column'] = np.tile([1, 0], repeats)[:len(df)]  # [:len(df)] обеспечивает, что длина new_column совпадает с длиной df хотим повторить [1, 0] 15 раз, чтобы получить 30 значений
+print(df)
