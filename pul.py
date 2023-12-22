@@ -76,21 +76,48 @@ print(df)
 # plt.show()
 #
 # print(df)
+# import pandas as pd
+#
+# # Изначальный DataFrame
+# df = pd.DataFrame({
+#     'A': [1, 2, 3],
+#     'B': [4, 5, 6],
+# })
+#
+# # DataFrame, из которого мы хотим взять столбцы
+# df1 = pd.DataFrame({
+#     'C': [7, 8, 9],
+#     'D': [10, 11, 12],
+# })
+#
+# # Добавляем столбцы 'C' и 'D' из df1 в df
+# df = pd.concat([df1[['C', 'D']], df], axis=1)
+#
+# print(df)
+
 import pandas as pd
+from statsmodels.tsa.seasonal import seasonal_decompose
+import matplotlib.pyplot as plt
 
-# Изначальный DataFrame
-df = pd.DataFrame({
-    'A': [1, 2, 3],
-    'B': [4, 5, 6],
-})
+# Пример данных временного ряда
+data = pd.Series([i + 3 * (i%12) for i in range(1, 49)])
+print(data)
 
-# DataFrame, из которого мы хотим взять столбцы
-df1 = pd.DataFrame({
-    'C': [7, 8, 9],
-    'D': [10, 11, 12],
-})
+# Используем аддитивную модель, так как данные линейно возрастают
+result = seasonal_decompose(data, model='local-trend', period=12)
 
-# Добавляем столбцы 'C' и 'D' из df1 в df
-df = pd.concat([df1[['C', 'D']], df], axis=1)
 
-print(df)
+result.plot()
+plt.show()
+
+from pulp import LpMaximize, LpProblem, LpStatus, LpVariable
+
+model = LpProblem(name="example-problem", sense=LpMaximize)
+x = LpVariable(name="x", lowBound=0)
+model += (x <= 1, "first_constraint")
+model += (x >= 2, "second_constraint")
+model += x
+
+status = model.solve()
+
+print(f"status: {model.status}, {LpStatus[model.status]}")
