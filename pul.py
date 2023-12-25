@@ -95,29 +95,34 @@ print(df)
 #
 # print(df)
 
-import pandas as pd
-from statsmodels.tsa.seasonal import seasonal_decompose
-import matplotlib.pyplot as plt
+# import pandas as pd
+# from statsmodels.tsa.seasonal import seasonal_decompose
+# import matplotlib.pyplot as plt
+#
+# # Пример данных временного ряда
+# data = pd.Series([i + 3 * (i%12) for i in range(1, 49)])
+# print(data)
+#
+# # Используем аддитивную модель, так как данные линейно возрастают
+# result = seasonal_decompose(data, model='local-trend', period=12)
+#
+#
+# result.plot()
+# plt.show()
+#
+# from pulp import LpMaximize, LpProblem, LpStatus, LpVariable
+#
+# model = LpProblem(name="example-problem", sense=LpMaximize)
+# x = LpVariable(name="x", lowBound=0)
+# model += (x <= 1, "first_constraint")
+# model += (x >= 2, "second_constraint")
+# model += x
+#
+# status = model.solve()
+#
+# print(f"status: {model.status}, {LpStatus[model.status]}")
+import numpy as np
 
-# Пример данных временного ряда
-data = pd.Series([i + 3 * (i%12) for i in range(1, 49)])
-print(data)
-
-# Используем аддитивную модель, так как данные линейно возрастают
-result = seasonal_decompose(data, model='local-trend', period=12)
-
-
-result.plot()
-plt.show()
-
-from pulp import LpMaximize, LpProblem, LpStatus, LpVariable
-
-model = LpProblem(name="example-problem", sense=LpMaximize)
-x = LpVariable(name="x", lowBound=0)
-model += (x <= 1, "first_constraint")
-model += (x >= 2, "second_constraint")
-model += x
-
-status = model.solve()
-
-print(f"status: {model.status}, {LpStatus[model.status]}")
+# Генерируем случайные числа от 0 до 3 и умножаем на 5
+random_numbers = np.random.randint(0, 4, size=10) * 5
+print(random_numbers)
