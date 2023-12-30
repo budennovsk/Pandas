@@ -119,6 +119,7 @@ for _ in tqdm(range(100)):
     # url = 'https://intoli.com/blog/not-possible-to-block-chrome-headless/chrome-headless-test.html'
     # driver.get(url)
     # time.sleep(10)
+    # print()
 
 
     # Открытие ссылки
