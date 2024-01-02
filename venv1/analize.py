@@ -150,33 +150,48 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 
-# Генерируем случайные данные
-np.random.seed(0)
-N = 100 # количество наблюдений
-K = 3 # количество признаков
-X = np.random.rand(N, K)
-# Генерируем метки классов
-y = np.random.choice([0, 1, 2], N)
+# # Генерируем случайные данные
+# np.random.seed(0)
+# N = 100 # количество наблюдений
+# K = 3 # количество признаков
+# X = np.random.rand(N, K)
+# # Генерируем метки классов
+# y = np.random.choice([0, 1, 2], N)
+#
+# # Преобразуем в pandas DataFrame
+# df = pd.DataFrame(X, columns=[f'feature{i+1}' for i in range(K)])
+# df['target'] = y
+#
+# # Создаем матрицу признаков и целевую переменную
+# X = df[['feature1', 'feature2', 'feature3']]
+# y = df['target']
+# print(df)
+#
+# # Добавляем константу для перехвата
+# X = sm.add_constant(X)
+# print(X)
+#
+# # Создаем MNL модель
+# mnl_model = sm.MNLogit(y, X)
+#
+# print(mnl_model)
+# # Обучаем модель
+# result = mnl_model.fit()
+#
+# # Выводим результаты
+# print(result.summary())
 
-# Преобразуем в pandas DataFrame
-df = pd.DataFrame(X, columns=[f'feature{i+1}' for i in range(K)])
-df['target'] = y
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
 
-# Создаем матрицу признаков и целевую переменную
-X = df[['feature1', 'feature2', 'feature3']]
-y = df['target']
-print(df)
+# создаем набор данных
+data, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
 
-# Добавляем константу для перехвата
-X = sm.add_constant(X)
-print(X)
+# создаем объект KMeans
+kmeans = KMeans(n_clusters=4)
 
-# Создаем MNL модель
-mnl_model = sm.MNLogit(y, X)
+# обучаем модель
+kmeans.fit(data)
 
-print(mnl_model)
-# Обучаем модель
-result = mnl_model.fit()
-
-# Выводим результаты
-print(result.summary())
+# предсказываем кластеры для наших данных
+predicted_clusters = kmeans.predict(data)
