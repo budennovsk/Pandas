@@ -180,18 +180,42 @@ import statsmodels.api as sm
 #
 # # Выводим результаты
 # print(result.summary())
+#
+# from sklearn.cluster import KMeans
+# from sklearn.datasets import make_blobs
+#
+# # создаем набор данных
+# data, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
+#
+# # создаем объект KMeans
+# kmeans = KMeans(n_clusters=4)
+#
+# # обучаем модель
+# kmeans.fit(data)
+#
+# # предсказываем кластеры для наших данных
+# predicted_clusters = kmeans.predict(data
 
-from sklearn.cluster import KMeans
-from sklearn.datasets import make_blobs
 
-# создаем набор данных
-data, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
+import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
+from sklearn.datasets import load_digits
 
-# создаем объект KMeans
-kmeans = KMeans(n_clusters=4)
+# Загрузка набора данных
+digits = load_digits()
+data = digits.data
+labels = digits.target
 
-# обучаем модель
-kmeans.fit(data)
+# Применение t-SNE
+tsne = TSNE(n_components=2, random_state=0)
+data_tsne = tsne.fit_transform(data)
 
-# предсказываем кластеры для наших данных
-predicted_clusters = kmeans.predict(data)
+# Визуализация результатов
+plt.figure(figsize=(13,10))
+scatter = plt.scatter(data_tsne[:, 0], data_tsne[:, 1], c=labels, cmap='viridis', alpha=0.7)
+
+# Добавление легенды
+legend1 = plt.legend(*scatter.legend_elements(), title="Classes")
+plt.add_artist(legend1)
+
+plt.show()
