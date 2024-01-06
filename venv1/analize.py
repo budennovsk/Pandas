@@ -197,25 +197,74 @@ import statsmodels.api as sm
 # predicted_clusters = kmeans.predict(data
 
 
-import matplotlib.pyplot as plt
-from sklearn.manifold import TSNE
-from sklearn.datasets import load_digits
+# import matplotlib.pyplot as plt
+# from sklearn.manifold import TSNE
+# from sklearn.datasets import load_digits
+#
+# # Загрузка набора данных
+# digits = load_digits()
+# data = digits.data
+# labels = digits.target
+#
+# # Применение t-SNE
+# tsne = TSNE(n_components=2, random_state=0)
+# data_tsne = tsne.fit_transform(data)
+#
+# # Визуализация результатов
+# plt.figure(figsize=(13,10))
+# scatter = plt.scatter(data_tsne[:, 0], data_tsne[:, 1], c=labels, cmap='viridis', alpha=0.7)
+#
+# # Добавление легенды
+# legend1 = plt.legend(*scatter.legend_elements(), title="Classes")
+# plt.add_artist(legend1)
 
-# Загрузка набора данных
-digits = load_digits()
-data = digits.data
-labels = digits.target
+# plt.show()
 
-# Применение t-SNE
-tsne = TSNE(n_components=2, random_state=0)
-data_tsne = tsne.fit_transform(data)
 
-# Визуализация результатов
-plt.figure(figsize=(13,10))
-scatter = plt.scatter(data_tsne[:, 0], data_tsne[:, 1], c=labels, cmap='viridis', alpha=0.7)
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import LabelEncoder
 
-# Добавление легенды
-legend1 = plt.legend(*scatter.legend_elements(), title="Classes")
-plt.add_artist(legend1)
+# Предположим, что df - это ваш исходный DataFrame
 
+# Фильтруем данные
+filtered_df = df[['Store','Date','Fuel_Price','Dept','Type']]
+
+
+# Кодируем категориальные переменные
+le = LabelEncoder()
+filtered_df['Type'] = le.fit_transform(filtered_df['Type'])
+
+filtered_df['Date'] = (filtered_df['Date'] - filtered_df['Date'].min()).dt.days
+
+# Выбираем колонки для кластеризации
+X = filtered_df[['Fuel_Price', 'Date']]
+
+
+# Создаем модель KMeans
+kmeans = KMeans(n_clusters=3)
+
+# Обучаем модель
+kmeans.fit(X)
+
+# Получаем метки кластеров
+labels = kmeans.labels_
+
+# Добавляем метки кластеров в DataFrame
+filtered_df.loc[:,'Cluster'] = labels
+
+# # Выводим DataFrame
+# print(filtered_df)
+
+
+plt.figure(figsize=(20,10))
+
+# Строим scatter plot, используя Fuel_Price для оси X, Type для оси Y и метки кластеров для цвета
+plt.scatter(filtered_df['Date'], filtered_df['Fuel_Price'], c=filtered_df['Cluster'])
+
+# Добавляем названия осей и заголовок
+plt.xlabel('Fuel_Price')
+plt.ylabel('Type')
+plt.title('KMeans Clustering')
+
+# Отображаем график
 plt.show()
