@@ -221,50 +221,72 @@ import statsmodels.api as sm
 # plt.show()
 
 
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import LabelEncoder
+# from sklearn.cluster import KMeans
+# from sklearn.preprocessing import LabelEncoder
+#
+# # Предположим, что df - это ваш исходный DataFrame
+#
+# # Фильтруем данные
+# filtered_df = df[['Store','Date','Fuel_Price','Dept','Type']]
+#
+#
+# # Кодируем категориальные переменные
+# le = LabelEncoder()
+# filtered_df['Type'] = le.fit_transform(filtered_df['Type'])
+#
+# filtered_df['Date'] = (filtered_df['Date'] - filtered_df['Date'].min()).dt.days
+#
+# # Выбираем колонки для кластеризации
+# X = filtered_df[['Fuel_Price', 'Date']]
+#
+#
+# # Создаем модель KMeans
+# kmeans = KMeans(n_clusters=3)
+#
+# # Обучаем модель
+# kmeans.fit(X)
+#
+# # Получаем метки кластеров
+# labels = kmeans.labels_
+#
+# # Добавляем метки кластеров в DataFrame
+# filtered_df.loc[:,'Cluster'] = labels
+#
+# # # Выводим DataFrame
+# # print(filtered_df)
+#
+#
+# plt.figure(figsize=(20,10))
+#
+# # Строим scatter plot, используя Fuel_Price для оси X, Type для оси Y и метки кластеров для цвета
+# plt.scatter(filtered_df['Date'], filtered_df['Fuel_Price'], c=filtered_df['Cluster'])
+#
+# # Добавляем названия осей и заголовок
+# plt.xlabel('Fuel_Price')
+# plt.ylabel('Type')
+# plt.title('KMeans Clustering')
+#
+# # Отображаем график
+# plt.show()
+import pandas as pd
 
-# Предположим, что df - это ваш исходный DataFrame
+# предположим, что df - это DataFrame с вашими данными о продажах
+# где 'StoreID' - идентификатор магазина, 'DepartmentID' - номер отдела, 'ProductName' - название товара, 'SaleDate' - дата продажи, 'Price' - цена товара, 'Quantity' - количество проданных единиц
 
-# Фильтруем данные
-filtered_df = df[['Store','Date','Fuel_Price','Dept','Type']]
+# вычисляем Recency и Frequency
+snapshot_date = df['SaleDate'].max() + pd.Timedelta(days=1)  # берем дату "снимка"
+df_rfm = df.groupby(['StoreID', 'DepartmentID', 'ProductName']).agg({
+    'SaleDate': lambda x: (snapshot_date - x.max()).days,  # Recency: количество дней с последней продажи
+    'Quantity': 'sum',  # Frequency: общее количество продаж
+    'Price': 'sum'  # Monetary: общая стоимость продаж (цена * количество)
+})
 
+# переименовываем столбцы
+df_rfm.rename(columns={'SaleDate': 'Recency',
+                       'Quantity': 'Frequency',
+                       'Price': 'MonetaryValue'}, inplace=True)
 
-# Кодируем категориальные переменные
-le = LabelEncoder()
-filtered_df['Type'] = le.fit_transform(filtered_df['Type'])
-
-filtered_df['Date'] = (filtered_df['Date'] - filtered_df['Date'].min()).dt.days
-
-# Выбираем колонки для кластеризации
-X = filtered_df[['Fuel_Price', 'Date']]
-
-
-# Создаем модель KMeans
-kmeans = KMeans(n_clusters=3)
-
-# Обучаем модель
-kmeans.fit(X)
-
-# Получаем метки кластеров
-labels = kmeans.labels_
-
-# Добавляем метки кластеров в DataFrame
-filtered_df.loc[:,'Cluster'] = labels
-
-# # Выводим DataFrame
-# print(filtered_df)
-
-
-plt.figure(figsize=(20,10))
-
-# Строим scatter plot, используя Fuel_Price для оси X, Type для оси Y и метки кластеров для цвета
-plt.scatter(filtered_df['Date'], filtered_df['Fuel_Price'], c=filtered_df['Cluster'])
-
-# Добавляем названия осей и заголовок
-plt.xlabel('Fuel_Price')
-plt.ylabel('Type')
-plt.title('KMeans Clustering')
-
-# Отображаем график
-plt.show()
+# разделяем на квинтили
+df_rfm['RecencyQ'] = pd.qcut(df_rfm['Recency'], 5, labels=range(5, 0, -1))  # для Recency меньше - лучше
+df_rfm['FrequencyQ'] = pd.qcut(df_rfm['Frequency'], 5, labels=range(1, 6))  # для Frequency больше - лучше
+df_rfm['MonetaryQ'] = pd.qcut(df_rfm['MonetaryValue'], 5, labels=range(1, 6))  # для Monetary больше - лучше
