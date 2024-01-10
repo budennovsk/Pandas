@@ -290,20 +290,22 @@ import statsmodels.api as sm
 # df_rfm['RecencyQ'] = pd.qcut(df_rfm['Recency'], 5, labels=range(5, 0, -1))  # для Recency меньше - лучше
 # df_rfm['FrequencyQ'] = pd.qcut(df_rfm['Frequency'], 5, labels=range(1, 6))  # для Frequency больше - лучше
 # df_rfm['MonetaryQ'] = pd.qcut(df_rfm['MonetaryValue'], 5, labels=range(1, 6))  # для Monetary больше - лучше
-import numpy as np
-from seglearn.transform import FeatureRep, SegmentX
-from seglearn.feature_functions import mean, var, std
-
-# Создаем простой временной ряд
-time = np.arange(0, 1000)
-measurement = np.sin(time * 2 * np.pi / 24) + np.random.normal(size=1000)
-y = np.array([0 if i < 500 else 1 for i in range(1000)])
-
-# Извлекаем признаки с использованием Seglearn
-segmenter = SegmentX(width=100, overlap=0.5)
-X, y, _ = segmenter.fit_transform([measurement], [y])
-
-feature_extractor = FeatureRep(features={'mean': mean, 'var': var, 'std': std})
-X = feature_extractor.transform(X)
-
-print(X)
+# import numpy as np
+# from seglearn.transform import FeatureRep, SegmentX
+# from seglearn.feature_functions import mean, var, std
+#
+# # Создаем простой временной ряд
+# time = np.arange(0, 1000)
+# measurement = np.sin(time * 2 * np.pi / 24) + np.random.normal(size=1000)
+# y = np.array([0 if i < 500 else 1 for i in range(1000)])
+#
+# # Извлекаем признаки с использованием Seglearn
+# segmenter = SegmentX(width=100, overlap=0.5)
+# X, y, _ = segmenter.fit_transform([measurement], [y])
+#
+# feature_extractor = FeatureRep(features={'mean': mean, 'var': var, 'std': std})
+# X = feature_extractor.transform(X)
+#
+# print(X)
+counts = df['SALE'].dropna().value_counts()
+print(counts)
