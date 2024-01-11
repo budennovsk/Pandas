@@ -307,5 +307,13 @@ import statsmodels.api as sm
 # X = feature_extractor.transform(X)
 #
 # print(X)
-counts = df['SALE'].dropna().value_counts()
-print(counts)
+# counts = df['SALE'].dropna().value_counts()
+# print(counts)
+# import pandas as pd
+# df = pd.DataFrame({'week':[1,2,3,4,5,6,7,8,10]})
+#
+#
+# df['fff'] = df['week'].apply(lambda x: 1 if x in [1, 4, 6] else 0)
+# print(df)
+old_list = [7, 11, 15, 16]
+new_list = list(range(1, len(old_list) + 1))
