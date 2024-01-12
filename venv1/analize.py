@@ -314,6 +314,16 @@ import statsmodels.api as sm
 #
 #
 # df['fff'] = df['week'].apply(lambda x: 1 if x in [1, 4, 6] else 0)
-# print(df)
-old_list = [7, 11, 15, 16]
-new_list = list(range(1, len(old_list) + 1))
+# # print(df)
+# old_list = [7, 11, 15, 16]
+# new_list = list(range(1, len(old_list) + 1))
+from skforecast.ForecasterAutoreg import ForecasterAutoreg
+from xgboost import XGBRegressor
+
+# Создаем список желаемых лагов
+my_lags = [1, 6, 12]
+
+forecaster_gb = ForecasterAutoreg(
+    regressor=XGBRegressor(random_state=963),
+    lags=my_lags
+)
