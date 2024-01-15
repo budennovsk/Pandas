@@ -317,13 +317,33 @@ import statsmodels.api as sm
 # # print(df)
 # old_list = [7, 11, 15, 16]
 # new_list = list(range(1, len(old_list) + 1))
-from skforecast.ForecasterAutoreg import ForecasterAutoreg
-from xgboost import XGBRegressor
+# from skforecast.ForecasterAutoreg import ForecasterAutoreg
+# from xgboost import XGBRegressor
+#
+# # Создаем список желаемых лагов
+# my_lags = [1, 6, 12]
+#
+# forecaster_gb = ForecasterAutoreg(
+#     regressor=XGBRegressor(random_state=963),
+#     lags=my_lags
+# )
+import matplotlib.pyplot as plt
 
-# Создаем список желаемых лагов
-my_lags = [1, 6, 12]
+# Генерация случайной даты в указанном интервале
+random_date = random.choice(pd.date_range(start='2020-01-01', end='2023-01-01'))
 
-forecaster_gb = ForecasterAutoreg(
-    regressor=XGBRegressor(random_state=963),
-    lags=my_lags
-)
+# Умножение значения в случайно выбранной точке на 1.2
+data.loc[random_date] *= 1.2
+
+# Построение графика временного ряда
+plt.figure(figsize=(10, 6))
+plt.plot(data.index, data.values, label='Time series')
+
+# Добавление точки на график
+plt.plot(random_date, data.loc[random_date], 'ro')  # 'ro' означает красные круглые маркеры
+
+# Добавление легенды
+plt.legend()
+
+# Отображение графика
+plt.show()
