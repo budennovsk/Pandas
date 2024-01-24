@@ -327,23 +327,41 @@ import statsmodels.api as sm
 #     regressor=XGBRegressor(random_state=963),
 #     lags=my_lags
 # )
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+#
+# # Генерация случайной даты в указанном интервале
+# random_date = random.choice(pd.date_range(start='2020-01-01', end='2023-01-01'))
+#
+# # Умножение значения в случайно выбранной точке на 1.2
+# data.loc[random_date] *= 1.2
+#
+# # Построение графика временного ряда
+# plt.figure(figsize=(10, 6))
+# plt.plot(data.index, data.values, label='Time series')
+#
+# # Добавление точки на график
+# plt.plot(random_date, data.loc[random_date], 'ro')  # 'ro' означает красные круглые маркеры
+#
+# # Добавление легенды
+# plt.legend()
+#
+# # Отображение графика
+# plt.show()
+params_4 = {
+    'depth': 10,
+    'learning_rate':  0.22624323441899713,
+    'iterations': 300
+}
 
-# Генерация случайной даты в указанном интервале
-random_date = random.choice(pd.date_range(start='2020-01-01', end='2023-01-01'))
 
-# Умножение значения в случайно выбранной точке на 1.2
-data.loc[random_date] *= 1.2
-
-# Построение графика временного ряда
-plt.figure(figsize=(10, 6))
-plt.plot(data.index, data.values, label='Time series')
-
-# Добавление точки на график
-plt.plot(random_date, data.loc[random_date], 'ro')  # 'ro' означает красные круглые маркеры
-
-# Добавление легенды
-plt.legend()
-
-# Отображение графика
-plt.show()
+forecaster_cb_best_par_exog_import = ForecasterAutoreg(
+                 regressor = CatBoostRegressor(random_state=963,silent=True,**params_4),
+                 lags      = [1, 2, 3, 27,52],
+                 differentiation = 1
+             )
+forecaster_cb_best_par_exog_import.fit(
+        y = calendar_features['Values'],
+        exog = calendar_features.iloc[:,1:]
+)
+feature_importances = forecaster_cb_best_par_exog_import.get_feature_importances()
+print(feature_importances.sort_values(by='importance', ascending=False))
