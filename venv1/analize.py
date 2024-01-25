@@ -346,22 +346,30 @@ import statsmodels.api as sm
 # plt.legend()
 #
 # # Отображение графика
-# plt.show()
-params_4 = {
-    'depth': 10,
-    'learning_rate':  0.22624323441899713,
-    'iterations': 300
-}
-
-
-forecaster_cb_best_par_exog_import = ForecasterAutoreg(
-                 regressor = CatBoostRegressor(random_state=963,silent=True,**params_4),
-                 lags      = [1, 2, 3, 27,52],
-                 differentiation = 1
-             )
-forecaster_cb_best_par_exog_import.fit(
-        y = calendar_features['Values'],
-        exog = calendar_features.iloc[:,1:]
-)
-feature_importances = forecaster_cb_best_par_exog_import.get_feature_importances()
-print(feature_importances.sort_values(by='importance', ascending=False))
+# # plt.show()
+# params_4 = {
+#     'depth': 10,
+#     'learning_rate':  0.22624323441899713,
+#     'iterations': 300
+# }
+#
+#
+# forecaster_cb_best_par_exog_import = ForecasterAutoreg(
+#                  regressor = CatBoostRegressor(random_state=963,silent=True,**params_4),
+#                  lags      = [1, 2, 3, 27,52],
+#                  differentiation = 1
+#              )
+# forecaster_cb_best_par_exog_import.fit(
+#         y = calendar_features['Values'],
+#         exog = calendar_features.iloc[:,1:]
+# )
+# feature_importances = forecaster_cb_best_par_exog_import.get_feature_importances()
+# print(feature_importances.sort_values(by='importance', ascending=False))
+# import pandas as pd
+# import hvplot.pandas  # adds hvplot method to pandas objects
+#
+# # Create a simple dataframe
+# df = pd.DataFrame({'x': range(10), 'y': range(10)})
+#
+# # Use hvplot to create a line plot
+# df.hvplot.line('x', 'y')
