@@ -344,7 +344,7 @@ import statsmodels.api as sm
 #
 # # Добавление легенды
 # plt.legend()
-#
+#plt
 # # Отображение графика
 # # plt.show()
 # params_4 = {
