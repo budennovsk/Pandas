@@ -387,3 +387,25 @@ import statsmodels.api as sm
 #     print("TRAIN:", train_index, "TEST:", test_index)
 #     X_train, X_test = X[train_index], X[test_index]
 #     y_train, y_test = y[train_index], y[test_index]
+from catboost import CatBoostRegressor
+import numpy as np
+import pandas as pd
+
+# предположим, у вас есть временной ряд:
+data = pd.Series(np.random.rand(100))
+
+# определите количество лагов
+lags = 3
+
+# создайте матрицу признаков на основе лагов
+X = pd.concat([data.shift(i) for i in range(lags, 0, -1)], axis=1).dropna()
+X.columns = ['lag_' + str(i) for i in range(1, lags + 1)]
+
+# целевая переменная будет текущим значением временного ряда
+y = data[X.index]
+
+# создайте модель
+model = CatBoostRegressor(verbose=0)
+
+# обучите модель
+model.fit(X, y)
